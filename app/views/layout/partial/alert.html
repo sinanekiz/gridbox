@@ -1,0 +1,28 @@
+<% if @errors?.length : %>
+  <br/> <div class="alert alert-danger"> <ul>
+       <% for error in @errors : %>
+             <li><strong>Error!</strong> <%= error%></li>
+       <% end %>
+     </ul> </div>
+<% end %>
+<% if @info?.length : %>
+  <br/> <div class="alert alert-info"> <ul>
+       <% for inf in @info : %>
+             <li><strong>İnfo!</strong> <%= inf%></li>
+       <% end %>
+     </ul> </div>
+<% end %>
+<% if @success?.length : %>
+  <br/> <div class="alert alert-success"> <ul>
+       <% for succ in @success : %>
+             <li><strong>Success!</strong> <%= succ%></li>
+       <% end %>
+     </ul> </div>
+<% end %>
+<% if @warning?.length : %>
+  <br/> <div class="alert alert-warning"> <ul>
+       <% for warn in @warning : %>
+             <li><strong>Warning!</strong> <%= warn%></li>
+       <% end %>
+     </ul> </div>
+<% end %>

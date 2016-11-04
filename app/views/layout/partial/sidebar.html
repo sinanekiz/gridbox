@@ -1,0 +1,63 @@
+<div class="page-sidebar navbar-collapse collapse">
+    <!-- BEGIN SIDEBAR MENU -->
+    <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
+    <!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
+    <!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
+    <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+    <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
+    <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+    <ul id="sidebar" class="page-sidebar-menu  page-header-fixed " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
+        <!-- DOC: To remove the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
+        <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+        <li class="sidebar-toggler-wrapper hide">
+            <div class="sidebar-toggler">
+                <span></span>
+            </div>
+        </li>
+        <!-- END SIDEBAR TOGGLER BUTTON -->
+        <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
+    </ul>
+    <!-- END SIDEBAR MENU -->
+    <!-- END SIDEBAR MENU -->
+</div>
+
+
+<% block 'scripts-sidebar' : %>
+<script>
+    var sidebar = [
+       { Title: "Anasayfa", Icon: "icon-home", Right: 1, ClassAttribute: "nav-item start", HrefAttribute: "/" }
+     , {
+         Title: "Modem", Icon: "icon-diamond", Right: 1, ClassAttribute: "nav-item", HrefAttribute: "#", SubMenuList: [
+             { Title: "Marka Model Islemleri", HrefAttribute: "/modemBrand", Right: 1, ClassAttribute: "nav-item" },
+             { Title: "Modem Yazilimlari", HrefAttribute: "/modemFirmware", Right: 1, ClassAttribute: "nav-item" },
+             { Title: "Modem Hatalari", HrefAttribute: "/modemException", Right: 1, ClassAttribute: "nav-item" }
+         ]
+     }
+
+    ];
+
+    function createSideBar(sidebar) {
+        var barstring = "";
+        sidebar.filter(function (bar) {
+            if (bar.Right >= 0) {
+                barstring += "<li  class='" + (bar.ClassAttribute) + "'>" +
+                    (bar.HrefAttribute ? (" <a href='" + (bar.HrefAttribute) + "' class='nav-link nav-toggle'>" +
+                        (bar.Icon ? "<i class='" + (bar.Icon) + "'></i>" : "") +
+                        (bar.Title ? "<span class='title'>" + (bar.Title) + "</span>" : "") +
+                        (bar.IsActive ? "<span class='selected'></span>" : "") +
+                        (bar.SubMenuList && bar.SubMenuList.length > 0 ? "<span class='arrow'></span>" : "") +
+                        "</a>") :
+                    (" <h3 class='uppercase'>" + (bar.Title) + "</h3>")) +
+                    (bar.SubMenuList && bar.SubMenuList.length > 0 ? ("<ul class='sub-menu'>" + createSideBar(bar.SubMenuList) + "</ul>") : "") +
+                    "</li>";
+            }
+        });
+        return barstring;
+    }
+
+    $(function () {
+        $("#sidebar").append(createSideBar(sidebar));
+    });
+
+</script>
+<% end %>

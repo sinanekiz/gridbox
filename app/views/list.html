@@ -1,0 +1,19 @@
+<% linkHelper = (link) -> %>
+<li><a href="<%- link.body %>"><%- link.body %></a></li>
+<% end %>
+
+<% if @articles?.length : %>
+<ul>
+    <% for link in @articles : %>
+    <%- linkHelper link %>
+    <% end %>
+</ul>
+<% else : %>
+<p>List is empty</p>
+<% end %>
+
+<% block 'scripts-list' : %>
+<script>
+ var test = 1;
+</script>
+<% end %>
