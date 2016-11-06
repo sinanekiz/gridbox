@@ -11,10 +11,10 @@ This is a demo node.js application illustrating various features used in everyda
 
 ## Boilerplate
 
-Want to build something from scratch? use the [boilerplate](https://github.com/madhums/node-express-mongoose)
+Want to build something from scratch? use the [boilerplate](https://github.com/sinanekiz/node-crud)
 
-* Checkout the [apps that are built using this approach](https://github.com/madhums/node-express-mongoose/wiki/Apps-built-using-this-approach)
-* The [wiki](https://github.com/madhums/node-express-mongoose/wiki) is wip, it has some information about the way application is setup.
+* Checkout the [apps that are built using this approach](https://github.com/sinanekiz/node-crud/wiki/Apps-built-using-this-approach)
+* The [wiki](https://github.com/sinanekiz/node-crud/wiki) is wip, it has some information about the way application is setup.
 
 ## Requirements
 
@@ -25,7 +25,7 @@ Want to build something from scratch? use the [boilerplate](https://github.com/m
 ## Install
 
 ```sh
-$ git clone git://github.com/madhums/node-express-mongoose-demo.git
+$ git clone https://github.com/sinanekiz/node-crud.git
 $ npm install
 ```
 
