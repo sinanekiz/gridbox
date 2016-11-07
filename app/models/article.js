@@ -43,7 +43,8 @@ const ArticleSchema = base.extend({
       cdnUri: String,
       files: []
     }
-    , trim: true
+    , trim: true,
+    hideTable: true
   }
 });
 
@@ -163,7 +164,7 @@ ArticleSchema.statics.load = function (_id) {
    * @api private
    */
 
-  ArticleSchema.staticslist = function (options) {
+  ArticleSchema.statics.list = function (options) {
     const criteria = options.criteria || {};
     const page = options.page || 0;
     const limit = options.limit || 30;

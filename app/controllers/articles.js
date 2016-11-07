@@ -13,8 +13,7 @@ const { respond, respondOrRedirect } = require('../utils');
 const Article = mongoose.model('Article');
 const assign = Object.assign;
 
-const base = require('./base');
-base.configure(Article, "users");
+var base = require('./base').configure(Article, "articles");
 
 router.get('/index', base.index);
 router.get('/datatable', base.datatable);

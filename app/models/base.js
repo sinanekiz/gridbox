@@ -46,7 +46,7 @@ const baseSchema = new Schema({
 
 baseSchema.statics.columns = function () {
     var columns = []
-    var schm=this.schema;
+    var schm = this.schema;
     this.schema.eachPath(function (path) {
         var attr = schm.paths[path];
         if (attr.options && !attr.options.hideTable) {
@@ -58,13 +58,35 @@ baseSchema.statics.columns = function () {
     return columns;
 }
 
-baseSchema.statics.createDatatable = function ( action = "datatable") {
+baseSchema.statics.createDatatable = function (action = "datatable") {
     var datatable = {
         processing: true,
         serverSide: true,
+        colReorder: true,
         ajax: {
             url: action
         },
+        buttons: [{
+            extend: "print",
+            className: "btn dark btn-outline"
+        }, {
+            extend: "copy",
+            className: "btn red btn-outline"
+        }, {
+            extend: "pdf",
+            className: "btn green btn-outline"
+        }, {
+            extend: "excel",
+            className: "btn yellow btn-outline "
+        }, {
+            extend: "csv",
+            className: "btn purple btn-outline "
+        }, {
+            extend: "colvis",
+            className: "btn dark btn-outline",
+            text: "Columns"
+        }],
+        responsive: !0,
         columns: this.columns(),
         serverParams: function (data) { data.bChunkSearch = true; }
     }
