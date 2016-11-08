@@ -16,6 +16,9 @@ const csrf = require('csurf');
 const cors = require('cors');
 const upload = require('multer')();
 const ECT = require('ect');
+var localize = require('./localize/index');
+
+ 
 
 const mongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
@@ -59,9 +62,9 @@ module.exports = function (app, passport) {
   // set views path, template engine and default layout
   //app.set('views', config.root + '/app/views');
   //app.set('view engine', 'jade');
-  
+
   // ECT view engine setup
-  var ectRenderer = ECT({ watch: true, root:  config.root + '/app/views', ext : '.html' });
+  var ectRenderer = ECT({ watch: true, root: config.root + '/app/views', ext: '.html' });
   app.set('views', config.root + '/app/views');
   app.set('view engine', 'html');
   app.engine('html', ectRenderer.render);
@@ -95,7 +98,7 @@ module.exports = function (app, passport) {
     secret: pkg.name,
     store: new mongoStore({
       url: config.db,
-      collection : 'sessions'
+      collection: 'sessions'
     })
   }));
 
@@ -114,10 +117,15 @@ module.exports = function (app, passport) {
 
     // This could be moved to view-helpers :-)
     // app.use(function (req, res, next) {
-     //  res.locals.csrf_token = req.csrfToken();
-     //  next();
+    //  res.locals.csrf_token = req.csrfToken();
+    //  next();
     // });
   }
+
+  //locallize
+  app.use(localize.configuration);
+  app.get('/js/localize.js',localize.js);
+  app.get('/localize/:lang',localize.set);
 
   if (env === 'development') {
     app.locals.pretty = true;
