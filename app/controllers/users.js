@@ -12,10 +12,8 @@ const router = express.Router();
 
 const User = mongoose.model('User');
 
-const base = require('./base');
-base.configure(User,"users");
+const base = require('./base').configure(User,"users");
 
- 
 router.get('/index',base.index);
 router.get('/datatable',base.datatable);
 
