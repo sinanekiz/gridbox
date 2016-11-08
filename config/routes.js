@@ -21,6 +21,7 @@ module.exports = function (app, passport) {
   app.use('/', require('../app/controllers/index'));
   app.use('/users', require('../app/controllers/users'));
   app.use('/articles',auth.requiresLogin, require('../app/controllers/articles'));
+  app.use('/customers',auth.requiresLogin, require('../app/controllers/customers'));
  
 
   // user routes
