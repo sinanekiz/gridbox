@@ -18,25 +18,27 @@ router.get('/createAll', async(function* (req, res) {
 
 
     var et = ElapsedTime.new().start();
-    //Customer.createIndex({ field: 1 }, { background: true });
-
+    var list = [];
     //milion data test
-    //for (var i = 0; i < 100000; i++) {
+    for (var i = 0; i < 300000; i++) {
 
-    //    var data = { name: guid.create().value.toString(), surname: guid.create().value, province: guid.create().value, district: guid.create().value, neigbourhood: guid.create().value }
-    //   var newCustomer = new Customer(data)
-    //    yield newCustomer.save();
+        var data = { name: guid.create().value.toString(), surname: guid.create().value, province: guid.create().value, district: guid.create().value, neigbourhood: guid.create().value }
+        var newCustomer = new Customer(data)
+        list.push(data);
 
-    // }
+    }
+    Customer.collection.insert(list,
+   { ordered: false }, onInsert);
 
-Customer.find({name:'0006ee7f-a337-d02e-d793-ade2a66b30b6'},function(result,data){
+    function onInsert(err, docs) {
+        if (err) {
+            console.log(err)
+        } else {
+            console.info('%d potatoes were successfully stored.', docs.length);
+            res.send({result:et.getValue()})
+        }
+    }
 
-    console.log(data)
-    console.log(et.getValue())
-
-})
-
-    res.send({ result: et.getValue() });
 }));
 
 module.exports = router;
