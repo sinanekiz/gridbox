@@ -16,7 +16,7 @@ exports.configuration = function (request, response, next) {
     response.locals.translate = myLocalize.translate
     response.locals.localDate = myLocalize.localDate
     response.locals.strings = myLocalize.strings
-    response.locals.lang = lang
+    response.locals.user = request.user
 
     next();
 }

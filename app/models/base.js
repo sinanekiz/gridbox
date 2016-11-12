@@ -6,6 +6,7 @@
 
 const mongoose = require('mongoose');
 const DataTable = require('mongoose-datatable');
+const localize = require('../../config/localize').localize;
 const Schema = mongoose.Schema;
 
 DataTable.configure({ verbose: false, debug: false });
@@ -50,11 +51,9 @@ baseSchema.statics.columns = function () {
     this.schema.eachPath(function (path) {
         var attr = schm.paths[path];
         if (attr.options && !attr.options.hideTable) {
-            columns.push({ data: path, title: path });
+            columns.push({ data: path, title: localize.translate(path) });
         }
     });
-    console.log();
-
     return columns;
 }
 
@@ -63,6 +62,8 @@ baseSchema.statics.createDatatable = function (action = "datatable") {
         processing: true,
         serverSide: true,
         colReorder: true,
+        name:"datatable-1",
+        dom:'<"top"i<"pull-right"f>>rt<"bottom"l<"pull-right"p>><"clear">',
         ajax: {
             url: action
         },
@@ -84,13 +85,15 @@ baseSchema.statics.createDatatable = function (action = "datatable") {
         }, {
             extend: "colvis",
             className: "btn dark btn-outline",
-            text: "Columns"
+            text: localize.translate("columns")
         }],
+        language: {
+            url: "/assets/global/plugins/datatables/languages/"+localize.translate("lng")+".json"
+        },
         responsive: !0,
         columns: this.columns(),
         serverParams: function (data) { data.bChunkSearch = true; }
     }
-    console.log(datatable);
     return datatable;
 }
 

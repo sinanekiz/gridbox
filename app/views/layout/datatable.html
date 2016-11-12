@@ -1,50 +1,66 @@
 <% extend 'layout/layout' %>
 
 
-    <div >
-        <br/>
-        <div class="portlet light bordered">
-            <div class="portlet-title">
-                <div class="caption">
-                    <i class="icon-settings font-green"></i>
-                    <span class="caption-subject font-green sbold uppercase">Table</span>
-                </div>
-                <div class="actions">
-                    <a class="dt-button buttons-collection buttons-colvis btn dark btn-outline btn-circle tool-action" data-action="5" tabindex="0"  href="#"><span>Columns</span></a>
-                    <div class="btn-group">
-                        <a class="btn red btn-outline btn-circle" href="javascript:;" data-toggle="dropdown">
-                            <i class="fa fa-share"></i>
-                            <span class="hidden-xs"> Trigger Tools </span>
-                            <i class="fa fa-angle-down"></i>
-                        </a>
-                        <ul class="dropdown-menu pull-right" id="datatable_tools">
-                            <li>
-                                <a href="javascript:;" data-action="0" class="tool-action">
-                                    <i class="icon-printer"></i> Print</a>
-                            </li>
-                            <li>
-                                <a href="javascript:;" data-action="1" class="tool-action">
-                                    <i class="icon-check"></i> Copy</a>
-                            </li>
-                            <li>
-                                <a href="javascript:;" data-action="2" class="tool-action">
-                                    <i class="icon-doc"></i> PDF</a>
-                            </li>
-                            <li>
-                                <a href="javascript:;" data-action="3" class="tool-action">
-                                    <i class="icon-paper-clip"></i> Excel</a>
-                            </li>
-                            <li>
-                                <a href="javascript:;" data-action="4" class="tool-action">
-                                    <i class="icon-cloud-upload"></i> CSV</a>
-                            </li> 
-                            </li>
-                        </ul>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-settings font-green"></i>
+                        <span class="caption-subject font-green sbold uppercase"><%= @title%></span>
+                    </div>
+                    <div class="actions">
+                        <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                        <a class="btn btn-default btn-outline btn-circle tool-action" data-action="5" title="<%= @translate 'columns' %>"
+                            href="#"> <i class="fa fa-columns"></i> </a>
+                        <div class="btn-group">
+                            <a class="btn btn-default btn-outline btn-circle" href="javascript:;" data-toggle="dropdown">
+                                <i class="fa fa-share"></i>
+                                <span class="hidden-xs"> <%= @translate "tools" %> </span>
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                            <ul class="dropdown-menu pull-right" id="datatable_tools">
+                                <li>
+                                    <a href="javascript:;" data-action="0" class="tool-action">
+                                        <i class="icon-printer"></i>
+                                        <%= @translate "print" %>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" data-action="1" class="tool-action">
+                                        <i class="icon-check"></i>
+                                        <%= @translate "copy" %>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" data-action="2" class="tool-action">
+                                        <i class="icon-doc"></i>
+                                        <%= @translate "pdf" %>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" data-action="3" class="tool-action">
+                                        <i class="icon-paper-clip"></i>
+                                        <%= @translate "excel" %>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" data-action="4" class="tool-action">
+                                        <i class="icon-cloud-upload"></i>
+                                        <%= @translate "csv" %>
+                                    </a>
+                                </li>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
+                <div class="portlet-body" id="datatables">
+                </div>
             </div>
-            <div class="portlet-body" id="datatables">
-            </div>
+        </div>
+        <div class="col-md-7">
+            <% content %>
         </div>
     </div>
 
@@ -53,16 +69,16 @@
         <link href="../assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css">
         <link href="../assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css">
         <style>
-            
-    .dt-button-collection {
-    top: 27% !important;
-    left: 76% !important;
-    display: block;
-}
+            .dt-button-collection {
+                top: 27% !important;
+                left: 26% !important;
+                display: block;
+                z-index:99999 !important;
+            }
         </style>
-    <% end %>
+        <% end %>
 
-   <% block 'scripts' : %>
+            <% block 'scripts' : %>
 
                 <script src="../assets/global/scripts/datatable.js" type="text/javascript"></script>
                 <script src="../assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
@@ -74,15 +90,35 @@
                      $(document).ready(function () {
                               var datatables=<%- JSON.stringify @datatables %> || [];
                               datatables.filter(function(datatable){
-                                       $("#datatables").append("<table id='"+datatable.name+"' cellpadding='0'' cellspacing='0' border='0'>")
+                                       $("#datatables").append("<table id='"+datatable.name+"' cellpadding='0'' cellspacing='0' border='0' style='width:100%'>")
                                        var dt=$('#'+datatable.name).DataTable(datatable)
                                        $(".tool-action").on("click", function() {
                                                 var e = $(this).attr("data-action");
                                                dt.button(e).trigger()
                                         })
+                                        datatablePlugins.onclick('#'+datatable.name,dt);
                                 })
             
                      });
+
+                      var datatablePlugins={ 
+                          onclick:function(datatableId,datatable){
+                               $(datatableId+' tbody').on( 'click', 'tr', function () {
+                                     if ( $(this).hasClass('selected') ) {
+                                         $(this).removeClass('selected');
+                                     }
+                                     else {
+                                         datatable.$('tr.selected').removeClass('selected');
+                                         $(this).addClass('selected');
+                                     }
+                                      var data = datatable.row( this ).data();
+                                      console.log(data);
+                                 } );
+                          }
+
+                      }  
+
+
                 </script>
 
-  <% end %>
+                <% end %>

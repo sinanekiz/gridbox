@@ -28,7 +28,7 @@ const UserSchema = base.extend({
   username: { type: String, default: '' },
   provider: { type: String, default: '' },
   hashed_password: { type: String, default: '' ,  hideTable: true},
-  salt: { type: String, default: '' },
+  salt: { type: String, default: '',hideTable: true },
   authToken: { type: String, default: '',hideTable: true },
   facebook: {type:{},hideTable: true},
   twitter: {type:{},hideTable: true},
