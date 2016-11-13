@@ -6,7 +6,7 @@
     "sInfoFiltered":   "(_MAX_ kayıt içerisinden bulunan)",
     "sInfoPostFix":    "",
     "sInfoThousands":  ".",
-    "sLengthMenu":     "Sayfada _MENU_ kayıt göster",
+    "sLengthMenu":     "_MENU_ kayıt göster",
     "sLoadingRecords": "Yükleniyor...",
     "sProcessing":     "İşleniyor...",
     "sSearch":         "Ara:",

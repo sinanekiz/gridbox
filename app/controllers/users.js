@@ -12,13 +12,19 @@ const router = express.Router();
 
 const User = mongoose.model('User');
 
-const base = require('./base').configure(User,"users");
+const base = require('./base').configure(User, "users");
 
-router.get('/index',base.index);
-router.get('/datatable',base.datatable);
+router.get('/index', base.index);
+router.get('/datatable', base.datatable);
+router.get('/edit/:_id?', base.edit);
+router.post('/edit/:_id?', function (req, res, next) {
+  req.assign = "name email username isNew";
+  next();
+}, base.update);
 
 
-router.post('/create',async(function* (req, res) {
+
+router.post('/create', async(function* (req, res) {
   const user = new User(req.body);
   user.provider = 'local';
   try {
@@ -39,7 +45,7 @@ router.post('/create',async(function* (req, res) {
   }
 }));
 
-router.get('/:userId',function (req, res) {
+router.get('/:userId', function (req, res) {
   const user = req.profile;
   respond(res, 'users/show', {
     title: user.name,
@@ -47,7 +53,7 @@ router.get('/:userId',function (req, res) {
   });
 });
 
-router.param('userId',async(function* (req, res, next, _id) {
+router.param('userId', async(function* (req, res, next, _id) {
   const criteria = { _id };
   try {
     req.profile = yield User.load({ criteria });

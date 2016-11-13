@@ -62,39 +62,47 @@ baseSchema.statics.createDatatable = function (action = "datatable") {
         processing: true,
         serverSide: true,
         colReorder: true,
-        name:"datatable-1",
-        dom:'<"top"i<"pull-right"f>>rt<"bottom"l<"pull-right"p>><"clear">',
+        name: "datatable-1",
+        dom: '<"top"i<"pull-right"f>>rt<"bottom"l<"pull-right"p>><"clear">',
         ajax: {
             url: action
         },
+        "scrollX": true,
         buttons: [{
             extend: "print",
             className: "btn dark btn-outline"
         }, {
-            extend: "copy",
-            className: "btn red btn-outline"
-        }, {
-            extend: "pdf",
-            className: "btn green btn-outline"
-        }, {
-            extend: "excel",
-            className: "btn yellow btn-outline "
-        }, {
-            extend: "csv",
-            className: "btn purple btn-outline "
-        }, {
-            extend: "colvis",
-            className: "btn dark btn-outline",
-            text: localize.translate("columns")
-        }],
+                extend: "copy",
+                className: "btn red btn-outline"
+            }, {
+                extend: "pdf",
+                className: "btn green btn-outline"
+            }, {
+                extend: "excel",
+                className: "btn yellow btn-outline "
+            }, {
+                extend: "csv",
+                className: "btn purple btn-outline "
+            }, {
+                extend: "colvis",
+                className: "btn dark btn-outline",
+                text: localize.translate("columns")
+            }],
         language: {
-            url: "/assets/global/plugins/datatables/languages/"+localize.translate("lng")+".json"
+            url: "/assets/global/plugins/datatables/languages/" + localize.translate("lng") + ".json"
         },
-        responsive: !0,
+        responsive:true,
         columns: this.columns(),
         serverParams: function (data) { data.bChunkSearch = true; }
     }
     return datatable;
+}
+
+baseSchema.statics.new = function (newObj) {
+    if (newObj) {
+        return new this(newObj);
+    }
+    return new this();
 }
 
 module.exports = baseSchema;
