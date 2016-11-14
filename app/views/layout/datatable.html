@@ -10,7 +10,8 @@
                         <span class="caption-subject font-blue-steel bold"><%= @title%></span>
                     </div>
                     <div class="actions">
-                        <a class="btn blue-steel font-white btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                         <a class="btn blue-steel font-white btn-default  btn-circle "   href="#">
+                            <i class="fa fa-plus"></i> <%= @translate 'createNew' %> </a>
                         <a class="btn blue-steel font-white btn-default  btn-circle tool-action" data-action="5" title="<%= @translate 'columns' %>" href="#">
                             <i class="fa fa-columns"></i> </a>
                         <div class="btn-group">
@@ -74,6 +75,9 @@
                 display: block;
                 z-index: 99999 !important;
             }
+            .dataTables_processing{
+                z-index: 100 !important;
+            }
         </style>
         <% end %>
 
@@ -89,7 +93,8 @@
                      $(document).ready(function () {
                          $(".menu-toggler").click();
                           var datatables=<%- JSON.stringify @datatables %> || [];
-                            simpler.datatable.create(datatables);
+                          var crud=<%- JSON.stringify @crud %> || {};
+                            simpler.datatable.create(datatables,crud);
                      });
                 </script>
                 <% content 'datatable-scripts' %>

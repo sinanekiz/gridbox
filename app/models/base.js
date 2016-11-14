@@ -57,6 +57,7 @@ baseSchema.statics.columns = function () {
     return columns;
 }
 
+
 baseSchema.statics.createDatatable = function (action = "datatable") {
     var datatable = {
         processing: true,
@@ -91,7 +92,6 @@ baseSchema.statics.createDatatable = function (action = "datatable") {
         language: {
             url: "/assets/global/plugins/datatables/languages/" + localize.translate("lng") + ".json"
         },
-        responsive:true,
         columns: this.columns(),
         serverParams: function (data) { data.bChunkSearch = true; }
     }

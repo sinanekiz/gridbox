@@ -13,6 +13,8 @@ const base = require('./base').configure(Customer, "customers");
 
 router.get('/index', base.index);
 router.get('/datatable', base.datatable);
+router.get('/edit/:_id?', base.edit);
+router.post('/edit/:_id?',  base.update);
 
 router.get('/createAll', async(function* (req, res) {
 

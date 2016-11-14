@@ -143,6 +143,50 @@ module.exports={
   logout:{
     en:"Log Out",
     tr:"Çıkış Yap"
+  },
+  save:{
+    en:"Save",
+    tr:"Kaydet"
+  },
+  proceses:{
+    en:"Proceses",
+    tr:"İşlemler"
+  },
+  cancel:{
+    en:"Cancel",
+    tr:"İptal"
+  },
+  edit:{
+    en:"Edit",
+    tr:"Düzenle"
+  },
+  delete:{
+    en:"Delete",
+    tr:"Sil"
+  },
+  general:{
+    en:"General",
+    tr:"Genel"
+  },
+  create:{
+    en:"Create",
+    tr:"Oluştur"
+  },
+  createNew:{
+    en:"Create New",
+    tr:"Yeni Oluştur"
+  },
+  update:{
+    en:"Update",
+    tr:"Güncelle"
+  },
+  new:{
+    en:"New",
+    tr:"Yeni"
+  },
+  isNew:{
+    en:"Is New",
+    tr:"Yeni mi"
   }
 
 }

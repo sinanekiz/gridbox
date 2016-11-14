@@ -15,7 +15,13 @@ exports.configure = function (model, controller) {
             datatables.push(datatable);
 
             res.render(controller + '/index', {
-                datatables: datatables
+                datatables: datatables,
+                crud: {
+                    create: "/" + controller + "/edit/",
+                    update: "/" + controller + "/edit/",
+                    delete: "/" + controller + "/delete/",
+                    read: "/" + controller + "/edit/",
+                }
             });
         }),
         datatable: async(function* (req, res, next) {
@@ -34,15 +40,14 @@ exports.configure = function (model, controller) {
         update: async(function* (req, res) {
             var newobj = model.new(req.body);
             if (req.params._id) {
-                var oldobj = yield model.findOne({ _id: req.params._id }).exec();
-                console.log(oldobj);
-                Object.assign(oldobj, only(newobj, req.assign));
-                console.log(oldobj);
-                yield oldobj.save();
-            }else{
-              yield newobj.save(); 
+                yield model.findOne({ _id: req.params._id }).exec(function (err, data) {
+                    Object.assign(data, only(req.body, model.assign()));
+                    data.save();
+                });
+            } else {
+                yield newobj.save();
             }
-            res.redirect("/"+controller + '/index');
+            res.redirect("/" + controller + '/index');
         })
 
     }

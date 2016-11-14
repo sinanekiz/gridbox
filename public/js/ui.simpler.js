@@ -90,12 +90,12 @@ var simpler = {
         }
     },
     datatable: {
-        create: function (datatables) {
+        create: function (datatables, crud) {
             datatables.filter(function (table) {
                 $("#datatables").append("<table id='" + table.name + "'  style='width:100%'>")
                 var datatable = $('#' + table.name).DataTable(table)
                 simpler.datatable.tools(datatable);
-                simpler.datatable.events.click('#' + table.name, datatable);
+                simpler.datatable.events.addAll('#' + table.name, datatable, crud);
             })
         },
         tools: function (datatable) {
@@ -104,23 +104,30 @@ var simpler = {
                 datatable.button(e).trigger()
             })
         },
+        crud: {},
+        getSelectedRowEdit: function (data) {
+            simpler.ajax.get(simpler.datatable.crud.read + data._id, function (result) {
+                $("#form-content").append(result.toString());
+            })
+        },
         events: {
+            addAll: function (id, datatable, crud) {
+                simpler.datatable.crud = crud;
+                simpler.datatable.events.click(id, datatable);
+            },
             click: function (datatableId, datatable) {
                 $(datatableId + ' tbody').on('click', 'tr', function () {
                     $("#form-content").empty();
                     if ($(this).hasClass('selected')) {
                         $(this).removeClass('selected');
-                        $("#datatables-portlet").attr("class","col-md-12");
+                        $("#datatables-portlet").attr("class", "col-md-12");
                     }
                     else {
                         datatable.$('tr.selected').removeClass('selected');
                         $(this).addClass('selected');
-                        $("#datatables-portlet").attr("class","col-md-5");
+                        $("#datatables-portlet").attr("class", "col-md-5");
                         var data = datatable.row(this).data();
-                        simpler.ajax.get("/users/edit/" + data._id, function (result) {
-                            console.log(result);
-                            $("#form-content").append(result.toString());
-                        })
+                        simpler.datatable.getSelectedRowEdit(data) ;
                     }
 
                 });

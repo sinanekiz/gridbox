@@ -27,14 +27,14 @@ const UserSchema = base.extend({
   email: { type: String, default: '' },
   username: { type: String, default: '' },
   provider: { type: String, default: '' },
-  hashed_password: { type: String, default: '' ,  hideTable: true},
-  salt: { type: String, default: '',hideTable: true },
-  authToken: { type: String, default: '',hideTable: true },
-  facebook: {type:{},hideTable: true},
-  twitter: {type:{},hideTable: true},
-  github: {type:{},hideTable: true},
-  google: {type:{},hideTable: true},
-  linkedin: {type:{},hideTable: true}
+  hashed_password: { type: String, default: '', hideTable: true },
+  salt: { type: String, default: '', hideTable: true },
+  authToken: { type: String, default: '', hideTable: true },
+  facebook: { type: {}, hideTable: true },
+  twitter: { type: {}, hideTable: true },
+  github: { type: {}, hideTable: true },
+  google: { type: {}, hideTable: true },
+  linkedin: { type: {}, hideTable: true }
 });
 
 const validatePresenceOf = value => value && value.length;
@@ -98,6 +98,8 @@ UserSchema.path('hashed_password').validate(function (hashed_password) {
  */
 
 UserSchema.pre('save', function (next) {
+  console.log(this.isNew)
+
   if (!this.isNew) return next();
 
   if (!validatePresenceOf(this.password) && !this.skipValidation()) {
@@ -185,5 +187,7 @@ UserSchema.statics.list = function (cb) {
     .select(options.select)
     .exec(cb);
 }
-
+UserSchema.statics.assign = function () {
+  return "name email username password";
+}
 mongoose.model('User', UserSchema);
