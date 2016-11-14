@@ -104,5 +104,7 @@ baseSchema.statics.new = function (newObj) {
     }
     return new this();
 }
-
+baseSchema.statics.assign = function (model) {
+  return "";
+}
 module.exports = baseSchema;

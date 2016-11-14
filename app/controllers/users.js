@@ -16,6 +16,7 @@ const base = require('./base').configure(User, "users");
 
 router.get('/index', base.index);
 router.get('/datatable', base.datatable);
+
 router.get('/edit/:_id?', base.edit);
 router.post('/edit/:_id?',   base.update);
 

@@ -46,9 +46,11 @@ const validatePresenceOf = value => value && value.length;
 UserSchema
   .virtual('password')
   .set(function (password) {
+    if(!this.isNew&&!password){return;}
     this._password = password;
     this.salt = this.makeSalt();
     this.hashed_password = this.encryptPassword(password);
+    console.log(this._password)
   })
   .get(function () {
     return this._password;
@@ -89,6 +91,9 @@ UserSchema.path('username').validate(function (username) {
 
 UserSchema.path('hashed_password').validate(function (hashed_password) {
   if (this.skipValidation()) return true;
+  if(!this.isNew&& !this._password){
+    return hashed_password.length
+  }
   return hashed_password.length && this._password.length;
 }, 'Password cannot be blank');
 
@@ -187,7 +192,10 @@ UserSchema.statics.list = function (cb) {
     .select(options.select)
     .exec(cb);
 }
-UserSchema.statics.assign = function () {
-  return "name email username password";
+UserSchema.statics.assign = function (model) {
+  if(model.password){
+      return "name email username password";
+  }
+  return "name email username";
 }
 mongoose.model('User', UserSchema);

@@ -41,8 +41,10 @@ exports.configure = function (model, controller) {
             var newobj = model.new(req.body);
             if (req.params._id) {
                 yield model.findOne({ _id: req.params._id }).exec(function (err, data) {
-                    Object.assign(data, only(req.body, model.assign()));
-                    data.save();
+                    Object.assign(data, only(req.body, model.assign(req.body)));
+                    data.save(function(err){
+                        console.log(err);
+                    });
                 });
             } else {
                 yield newobj.save();
