@@ -1,0 +1,17 @@
+<% extend 'layout/form' %>
+<% include 'helpers' %>
+
+<form role="form" id="ajax-form" method="POST" action="/users/edit/<% if !@model.isNew : %><%-@model._id%><%end%>">
+    <div class="form-body">
+        <%- @formGroup "_id"  %>
+
+            <%- @formGroup "name","required" %>
+                <%- @formGroup "email" %>
+                    <%- @formGroup "username" %>
+                        <%- @formGroup "password" %>
+    </div>
+    <div class="form-actions noborder align-right">
+        <button type="submit" class="btn blue">Submit</button>
+        <button type="button" class="btn default">Cancel</button>
+    </div>
+</form>

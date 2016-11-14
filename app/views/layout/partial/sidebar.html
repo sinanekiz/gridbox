@@ -25,11 +25,11 @@
 <% block 'scripts-sidebar' : %>
 <script>
     var sidebar = [
-       { Title: "Home", Icon: "icon-home", Right: 1, ClassAttribute: "nav-item start", HrefAttribute: "/" }
-     , { Title: "Users", Icon: "icon-users", Right: 1, ClassAttribute: "nav-item", HrefAttribute: "/users/index" }
-     , { Title: "Articles", Icon: "icon-article", Right: 1, ClassAttribute: "nav-item", HrefAttribute: "/articles/index" }
+       { Title: '<%= @translate "home"%>', Icon: "icon-home", Right: 1, ClassAttribute: "nav-item start", HrefAttribute: "/" }
+     , { Title: '<%= @translate "users"%>', Icon: "icon-users", Right: 1, ClassAttribute: "nav-item", HrefAttribute: "/users/index" }
+     , { Title: '<%= @translate "articles"%>', Icon: "icon-article", Right: 1, ClassAttribute: "nav-item", HrefAttribute: "/articles/index" }
      , {
-         Title: "example", Icon: "icon-diamond", Right: 1, ClassAttribute: "nav-item", HrefAttribute: "#", SubMenuList: [
+         Title:'<%= @translate "example"%>', Icon: "icon-diamond", Right: 1, ClassAttribute: "nav-item", HrefAttribute: "#", SubMenuList: [
              { Title: "Marka Model Islemleri", HrefAttribute: "/modemBrand", Right: 1, ClassAttribute: "nav-item" },
              { Title: "Modem Yazilimlari", HrefAttribute: "/modemFirmware", Right: 1, ClassAttribute: "nav-item" },
              { Title: "Modem Hatalari", HrefAttribute: "/modemException", Right: 1, ClassAttribute: "nav-item" }
