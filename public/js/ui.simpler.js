@@ -4,17 +4,7 @@ if (!$.bootstrapGrowl) { throw new Error("simpler.notification requires bootstra
 var simpler = {
     ajax: {
         post: function (url, data, success, error) {
-            $.ajax({
-                url: url,
-                cache: false,
-                processData: false,
-                type: 'POST',
-                data: JSON.stringify(data),
-                dataType: "json",
-                contentType: "application/json; charset=utf-8",
-                success: success || simpler.notification.default,
-                error: error || simpler.error
-            });
+           $.post(url,data).done(success || simpler.notification.default).fail(error || simpler.error).always();
         },
         get: function (url, success, error) {
             $.ajax({
@@ -90,10 +80,12 @@ var simpler = {
         }
     },
     datatable: {
+        allTables:[],
         create: function (datatables, crud) {
             datatables.filter(function (table) {
                 $("#datatables").append("<table id='" + table.name + "'  style='width:100%'>")
-                var datatable = $('#' + table.name).DataTable(table)
+                var datatable = $('#' + table.name).DataTable(table);
+                simpler.datatable.allTables.push(datatable);
                 simpler.datatable.tools(datatable);
                 simpler.datatable.events.addAll('#' + table.name, datatable, crud);
             })
@@ -104,31 +96,58 @@ var simpler = {
                 datatable.button(e).trigger()
             })
         },
-        crud: {},
-        getSelectedRowEdit: function (data) {
-            simpler.ajax.get(simpler.datatable.crud.read + data._id, function (result) {
-                $("#form-content").append(result.toString());
-            })
+        crud: {
+            config:{},
+            create:function(datatable){
+                 
+            },
+            read:function (data) {
+                    simpler.datatable.width.setSmall();
+                    simpler.ajax.get(simpler.datatable.crud.config.read + data._id, function (result) {
+                       $("#form-content").empty();
+                       $("#form-content").append(result.toString());
+                   });
+             },
+            update:function(){
+                var url=$("#ajax-form").attr("action");
+                var obj=$("#ajax-form").serializeObject();
+                simpler.ajax.post(url,obj,function(result){
+                    simpler.datatable.allTables.filter(function(table){
+                        table.ajax.reload();
+                     });
+                });
+            },
+            delete:{}
+
         },
+        width:{
+            setFull:function(){
+                 $("#datatables-portlet").attr("class", "col-md-12");
+                 $("#form-content").empty();
+            },
+            setSmall:function(){
+                 $("#datatables-portlet").attr("class", "col-md-5");
+
+            },
+            setHidden:function(){}
+        }, 
         events: {
             addAll: function (id, datatable, crud) {
-                simpler.datatable.crud = crud;
+                simpler.datatable.crud.config = crud;
                 simpler.datatable.events.click(id, datatable);
             },
             click: function (datatableId, datatable) {
                 $(datatableId + ' tbody').on('click', 'tr', function () {
-                    $("#form-content").empty();
                     if ($(this).hasClass('selected')) {
                         $(this).removeClass('selected');
-                        $("#datatables-portlet").attr("class", "col-md-12");
+                        simpler.datatable.width.setFull();
                     }
                     else {
                         datatable.$('tr.selected').removeClass('selected');
                         $(this).addClass('selected');
-                        $("#datatables-portlet").attr("class", "col-md-5");
                         var data = datatable.row(this).data();
-                        simpler.datatable.getSelectedRowEdit(data) ;
-                    }
+                        simpler.datatable.crud.read(data) ;
+                     }
 
                 });
             }
