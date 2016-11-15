@@ -14,15 +14,18 @@ const User = mongoose.model('User');
 
 const base = require('./base').configure(User, "users");
 
+router.param('_id', base.findOne);
+
 router.get('/index', base.index);
 router.get('/datatable', base.datatable);
 
 router.get('/edit/:_id?', base.edit);
-router.post('/edit/:_id?',   base.update);
+router.post('/create',   base.post);
+router.post('/edit/:_id?',   base.put);
 
 
 
-router.post('/create', async(function* (req, res) {
+router.post('/signup', async(function* (req, res) {
   const user = new User(req.body);
   user.provider = 'local';
   try {

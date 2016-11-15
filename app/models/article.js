@@ -75,76 +75,67 @@ ArticleSchema.pre('remove', function (next) {
  * Methods
  */
 
-ArticleSchema.methods = {
+ArticleSchema.methods.uploadAndSave= function (image) {
+  const err = this.validateSync();
+  if (err && err.toString()) throw new Error(err.toString());
+  return this.save();
 
-  /**
-   * Save article and upload image
-   *
-   * @param {Object} images
-   * @api private
-   */
+  /*
+  if (images && !images.length) return this.save();
+  const imager = new Imager(imagerConfig, 'S3');
 
-  uploadAndSave: function (image) {
-    const err = this.validateSync();
-    if (err && err.toString()) throw new Error(err.toString());
-    return this.save();
+  imager.upload(images, function (err, cdnUri, files) {
+    if (err) return cb(err);
+    if (files.length) {
+      self.image = { cdnUri : cdnUri, files : files };
+    }
+    self.save(cb);
+  }, 'article');
+  */
+},
 
-    /*
-    if (images && !images.length) return this.save();
-    const imager = new Imager(imagerConfig, 'S3');
+/**
+ * Add comment
+ *
+ * @param {User} user
+ * @param {Object} comment
+ * @api private
+ */
 
-    imager.upload(images, function (err, cdnUri, files) {
-      if (err) return cb(err);
-      if (files.length) {
-        self.image = { cdnUri : cdnUri, files : files };
-      }
-      self.save(cb);
-    }, 'article');
-    */
-  },
+ArticleSchema.methods.addComment= function (user, comment) {
+  this.comments.push({
+    body: comment.body,
+    user: user._id
+  });
 
-  /**
-   * Add comment
-   *
-   * @param {User} user
-   * @param {Object} comment
-   * @api private
-   */
+  if (!this.user.email) this.user.email = 'email@product.com';
 
-  addComment: function (user, comment) {
-    this.comments.push({
-      body: comment.body,
-      user: user._id
-    });
+  notify.comment({
+    article: this,
+    currentUser: user,
+    comment: comment.body
+  });
 
-    if (!this.user.email) this.user.email = 'email@product.com';
+  return this.save();
+},
 
-    notify.comment({
-      article: this,
-      currentUser: user,
-      comment: comment.body
-    });
+/**
+ * Remove comment
+ *
+ * @param {commentId} String
+ * @api private
+ */
 
-    return this.save();
-  },
+ArticleSchema.methods.removeComment= function (commentId) {
+  const index = this.comments
+    .map(comment => comment.id)
+    .indexOf(commentId);
 
-  /**
-   * Remove comment
-   *
-   * @param {commentId} String
-   * @api private
-   */
+  if (~index) this.comments.splice(index, 1);
+  else throw new Error('Comment not found');
+  return this.save();
+}
 
-  removeComment: function (commentId) {
-    const index = this.comments
-      .map(comment => comment.id)
-      .indexOf(commentId);
-
-    if (~index) this.comments.splice(index, 1);
-    else throw new Error('Comment not found');
-    return this.save();
-  }
-};
 
 /**
  * Statics
@@ -155,7 +146,7 @@ ArticleSchema.statics.load = function (_id) {
     .populate('user', 'name email username')
     .populate('comments.user')
     .exec();
-},
+}
 
   /**
    * List articles

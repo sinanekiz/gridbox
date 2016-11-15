@@ -1,1 +1,15 @@
- <% extend 'articles/form' %>
+<% extend 'layout/form' %>
+    <% include 'helpers' %>
+
+        <div class="form-body">
+            <div style="display:none">
+                <%- @formGroup "_id"  %>
+            </div>
+            <div class="col-md-6">
+                <%- @formGroup "title","required" %>
+                    <%- @formGroup "body" %>
+            </div>
+            <div class="col-md-6">
+                <%- @formGroup "tags" %> 
+            </div>
+        </div>

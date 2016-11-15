@@ -15,8 +15,14 @@ const assign = Object.assign;
 
 var base = require('./base').configure(Article, "articles");
 
+router.param('_id', base.findOne);
+
 router.get('/index', base.index);
 router.get('/datatable', base.datatable);
+
+router.get('/edit/:_id?', base.edit);
+router.post('/create',   base.post);
+router.post('/edit/:_id?',   base.put);
 
 router.param('id', async(function* (req, res, next, id) {
   try {

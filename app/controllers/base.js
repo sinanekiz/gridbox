@@ -5,13 +5,23 @@
  */
 const only = require('only');
 const { wrap: async } = require('co');
-const { respond } = require('../utils');
+const { respond, respondOrRedirect } = require('../utils');
 
-exports.configure = function (model, controller) {
+exports.configure = function (schema, controller) {
     return {
+        findOne: async(function* (req, res, next, _id) {
+            const criteria = { _id };
+            try {
+                req.model = yield schema.load({ criteria });
+                if (!req.model) return next(new Error('Record not found'));
+            } catch (err) {
+                return next(err);
+            }
+            next();
+        }),
         index: async(function* (req, res) {
             var datatables = []
-            var datatable = model.createDatatable();
+            var datatable = schema.createDatatable();
             datatables.push(datatable);
 
             res.render(controller + '/index', {
@@ -25,31 +35,66 @@ exports.configure = function (model, controller) {
             });
         }),
         datatable: async(function* (req, res, next) {
-            console.log(req.query)
-            model.dataTable(req.query, function (err, data) { console.log(data); return res.send(data); });
+            schema.dataTable(req.query, function (err, data) { return res.send(data); });
         }),
         edit: async(function* (req, res) {
-            var obj = model.new();
+            var model = schema.new();
             if (req.params._id) {
-                obj = yield model.findOne({ _id: req.params._id }).exec();
+                model = req.model;
             }
             res.render(controller + '/edit', {
-                model: obj
+                model: model,
+                controller: controller
             });
         }),
-        update: async(function* (req, res) {
-            var newobj = model.new(req.body);
-            if (req.params._id) {
-                yield model.findOne({ _id: req.params._id }).exec(function (err, data) {
-                    Object.assign(data, only(req.body, model.assign(req.body)));
-                    data.save(function(err){
-                        console.log(err);
+        post: async(function* (req, res) {
+            const model = schema.new(req.body);
+            //model.user = req.user;
+            try {
+                yield model.saveChanges();
+                respondOrRedirect({ req, res }, `/${controller}/edit/${model._id}`, {
+                    model: model,
+                    controller: controller
+                }, {
+                        type: 'success',
+                        text: 'Successfully created model!'
                     });
-                });
-            } else {
-                yield newobj.save();
+            } catch (err) {
+                respond(res, `${controller}/edit`, {
+                    title: 'New ',
+                    errors: [err.toString()],
+                    model,
+                    controller
+                }, 422);
             }
-            res.redirect("/" + controller + '/index');
+        }),
+        put: async(function* (req, res) {
+            const model = req.model;
+            Object.assign(model, only(req.body, model.assign()));
+            try {
+                yield model.saveChanges();
+                respondOrRedirect({ req,res }, `/${controller}/edit/${model._id}`, {
+                    model: model,
+                    controller: controller
+                }, {
+                        type: 'success',
+                        text: 'Successfully updated model!'
+                    });
+            } catch (err) {
+                respond(res, `${controller}/edit`, {
+                    title: 'Edit ',
+                    errors: [err.toString()],
+                    model,
+                    controller
+                }, 422);
+            }
+        }),
+        delete: async(function* (req, res) {
+            yield req.model.remove();
+            respondOrRedirect({ req, res }, controller+"/index", {}, {
+                type: 'info',
+                text: 'Deleted successfully'
+            });
         })
 
     }

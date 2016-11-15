@@ -12,7 +12,7 @@ const Customer = base.extend({
   neigbourhood: { type: String, default: '' }
 });
 
-Customer.statics.assign = function (model) {
+Customer.methods.assign = function (model) {
   return "name surname province district";
 } 
 mongoose.model('Customer', Customer);

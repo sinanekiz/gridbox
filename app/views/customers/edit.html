@@ -1,23 +1,17 @@
 <% extend 'layout/form' %>
     <% include 'helpers' %>
 
-        <form role="form" id="ajax-form" method="POST" action="/customers/edit/<% if !@model.isNew : %><%-@model._id%><%end%>">
-            <div class="form-body">
-                <div style="display:none">
-                    <%- @formGroup "_id"  %>
-                </div>
-                <div class="col-md-6">
-                    <%- @formGroup "name","required" %>
-                        <%- @formGroup "surname" %>
-                </div>
-                <div class="col-md-6">
-                    <%- @formGroup "province" %>
-                        <%- @formGroup "district" %>
-                            <%- @formGroup "neigbourhood" %>
-                </div>
+        <div class="form-body">
+            <div style="display:none">
+                <%- @formGroup "_id"  %>
             </div>
-            <div class="form-actions noborder align-right">
-                <button type="submit" class="btn blue">Submit</button>
-                <button type="button" class="btn default">Cancel</button>
+            <div class="col-md-6">
+                <%- @formGroup "name","required" %>
+                    <%- @formGroup "surname" %>
             </div>
-        </form>
+            <div class="col-md-6">
+                <%- @formGroup "province" %>
+                    <%- @formGroup "district" %>
+                        <%- @formGroup "neigbourhood" %>
+            </div>
+        </div>

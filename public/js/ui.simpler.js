@@ -4,7 +4,7 @@ if (!$.bootstrapGrowl) { throw new Error("simpler.notification requires bootstra
 var simpler = {
     ajax: {
         post: function (url, data, success, error) {
-           $.post(url,data).done(success || simpler.notification.default).fail(error || simpler.error).always();
+            $.post(url, data).done(success || simpler.notification.default).fail(error || simpler.error).always();
         },
         get: function (url, success, error) {
             $.ajax({
@@ -80,7 +80,12 @@ var simpler = {
         }
     },
     datatable: {
-        allTables:[],
+        allTables: [],
+        reload: function () {
+            simpler.datatable.allTables.filter(function (table) {
+                table.ajax.reload();
+            });
+        },
         create: function (datatables, crud) {
             datatables.filter(function (table) {
                 $("#datatables").append("<table id='" + table.name + "'  style='width:100%'>")
@@ -96,41 +101,43 @@ var simpler = {
                 datatable.button(e).trigger()
             })
         },
+        form: {
+            reCreate: function (form) {
+                $("#form-content").empty();
+                $("#form-content").append(form);
+            }
+        },
         crud: {
-            config:{},
-            create:function(datatable){
-                 
+            config: {},
+            create: function (datatable) {
+
             },
-            read:function (data) {
-                    simpler.datatable.width.setSmall();
-                    simpler.ajax.get(simpler.datatable.crud.config.read + data._id, function (result) {
-                       $("#form-content").empty();
-                       $("#form-content").append(result.toString());
-                   });
-             },
-            update:function(){
-                var url=$("#ajax-form").attr("action");
-                var obj=$("#ajax-form").serializeObject();
-                simpler.ajax.post(url,obj,function(result){
-                    simpler.datatable.allTables.filter(function(table){
-                        table.ajax.reload();
-                     });
+            read: function (data) {
+                simpler.datatable.width.setSmall();
+                simpler.ajax.get(simpler.datatable.crud.config.read + data._id, simpler.datatable.form.reCreate);
+            },
+            update: function () {
+                var url = $("#ajax-form").attr("action");
+                var obj = $("#ajax-form").serializeObject();
+                simpler.ajax.post(url, obj, function (result) {
+                    simpler.datatable.form.reCreate(result);
+                    simpler.datatable.reload();
                 });
             },
-            delete:{}
+            delete: {}
 
         },
-        width:{
-            setFull:function(){
-                 $("#datatables-portlet").attr("class", "col-md-12");
-                 $("#form-content").empty();
+        width: {
+            setFull: function () {
+                $("#datatables-portlet").attr("class", "col-md-12");
+                $("#form-content").empty();
             },
-            setSmall:function(){
-                 $("#datatables-portlet").attr("class", "col-md-5");
+            setSmall: function () {
+                $("#datatables-portlet").attr("class", "col-md-5");
 
             },
-            setHidden:function(){}
-        }, 
+            setHidden: function () { }
+        },
         events: {
             addAll: function (id, datatable, crud) {
                 simpler.datatable.crud.config = crud;
@@ -146,8 +153,8 @@ var simpler = {
                         datatable.$('tr.selected').removeClass('selected');
                         $(this).addClass('selected');
                         var data = datatable.row(this).data();
-                        simpler.datatable.crud.read(data) ;
-                     }
+                        simpler.datatable.crud.read(data);
+                    }
 
                 });
             }

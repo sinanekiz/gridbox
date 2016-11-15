@@ -8,7 +8,7 @@
             <div class="btn-group">
                 <a class="btn btn-sm default dropdown-toggle" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
                     <%= @translate 'proceses' %>
-                    <i class="fa fa-angle-down"></i>
+                        <i class="fa fa-angle-down"></i>
                 </a>
                 <ul class="dropdown-menu pull-right">
                     <li>
@@ -18,17 +18,26 @@
                         </a>
                     </li>
                     <li class="divider"> </li>
+                    <% if !@model.isNew : %>
                     <li>
-                        <a href="javascript:;">
-                            <i class="fa fa-trash-o"></i>
+                        <a class="font-red" onclick="simpler.datatable.crud.delete()">
+                            <i class="fa font-red fa-trash-o"></i>
                             <%= @translate 'delete' %>
                         </a>
                     </li>
+                     <%end%>
                 </ul>
             </div>
         </div>
     </div>
     <div class="portlet-body form">
-        <% content %>
+          <% include 'layout/partial/alert' %>
+        <form role="form" id="ajax-form" method="POST" action="/<%=@controller%>/<% if !@model.isNew : %>edit/<%-@model._id%><%else:%>create<%end%>">
+             <% content %>
+            <div class="form-actions noborder align-right">
+                <button type="button" onclick="simpler.datatable.crud.update()" class="btn blue"><%= @translate "save"%></button>
+                <button type="button" onclick="simpler.datatable.width.setFull()" class="btn default"><%= @translate "cancel"%></button>
+            </div>
+        </form>
     </div>
 </div>
