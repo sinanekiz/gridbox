@@ -22,7 +22,8 @@ router.get('/datatable', base.datatable);
 
 router.get('/edit/:_id?', base.edit);
 router.post('/create',   base.post);
-router.post('/edit/:_id?',   base.put);
+router.post('/edit/:_id',   base.put);
+router.delete('/delete/:_id',   base.delete);
 
 router.param('id', async(function* (req, res, next, id) {
   try {

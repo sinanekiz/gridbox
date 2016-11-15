@@ -3,10 +3,10 @@ if (!$.bootstrapGrowl) { throw new Error("simpler.notification requires bootstra
 
 var simpler = {
     ajax: {
-        post: function (url, data, success, error) {
+        post: function(url, data, success, error) {
             $.post(url, data).done(success || simpler.notification.default).fail(error || simpler.error).always();
         },
-        get: function (url, success, error) {
+        get: function(url, success, error) {
             $.ajax({
                 url: url,
                 cache: false,
@@ -19,13 +19,13 @@ var simpler = {
         }
     }
     , notification: {
-        success: function (message) {
+        success: function(message) {
             $.bootstrapGrowl(message, { ele: "body", type: "success", offset: { from: "bottom", amount: 20 }, align: "Right" });
         },
-        error: function (message) {
+        error: function(message) {
             $.bootstrapGrowl(message, { ele: "body", type: "danger", offset: { from: "bottom", amount: 20 }, align: "Right" });
         },
-        default: function (response) {
+        default: function(response) {
             $("#editFormWaiting").modal('hide');
 
             if (response.status) {
@@ -37,17 +37,17 @@ var simpler = {
             }
         }
     }
-    , error: function (error) {
+    , error: function(error) {
         alert("İnternet Bağlantınızı Kontrol edin");
         console.log(error);
     }
     , selectList: {
-        pushList: function (list, selectedId, inputId) {
+        pushList: function(list, selectedId, inputId) {
             $(inputId).empty();
             $(inputId).append(list);
             $(inputId).val(selectedId);
         },
-        createSelectDom: function (data, selectedId, inputId) {
+        createSelectDom: function(data, selectedId, inputId) {
             var list = "<option value=''>Seçiniz</option>";
             for (var index = 0; index < data.length; index++) {
                 list += "<option value='" + data[index].Id + "' text='" + data[index].Name.turkishToUpper() + "' >" + data[index].Name + "</option>";
@@ -57,23 +57,23 @@ var simpler = {
             simpler.selectList.pushList(list, selectedId, inputId);
 
         },
-        listenList: function (data) {
+        listenList: function(data) {
             if (!data) { return; }
             var domElement = $(data.domId);
             var newData = data.subList;
-            domElement.bind('input', function (e, callback) {
+            domElement.bind('input', function(e, callback) {
                 if (!newData) { return; }
-                simpler.ajax.get(newData.url + domElement.val(), function (response) {
+                simpler.ajax.get(newData.url + domElement.val(), function(response) {
                     simpler.selectList.createSelectDom(response.value, newData.selectedId, newData.domId);
                     callback ? callback() : null;
-                }, function () { });
+                }, function() { });
             });
             simpler.selectList.listenList(newData);
             //$(domElement).change();
 
         },
-        createLists: function (data) {
-            simpler.ajax.get(data.url, function (response) {
+        createLists: function(data) {
+            simpler.ajax.get(data.url, function(response) {
                 simpler.selectList.createSelectDom(response.value, data.selectedId, data.domId);
                 simpler.selectList.listenList(data);
             });
@@ -81,13 +81,13 @@ var simpler = {
     },
     datatable: {
         allTables: [],
-        reload: function () {
-            simpler.datatable.allTables.filter(function (table) {
+        reload: function() {
+            simpler.datatable.allTables.filter(function(table) {
                 table.ajax.reload();
             });
         },
-        create: function (datatables, crud) {
-            datatables.filter(function (table) {
+        create: function(datatables, crud) {
+            datatables.filter(function(table) {
                 $("#datatables").append("<table id='" + table.name + "'  style='width:100%'>")
                 var datatable = $('#' + table.name).DataTable(table);
                 simpler.datatable.allTables.push(datatable);
@@ -95,56 +95,62 @@ var simpler = {
                 simpler.datatable.events.addAll('#' + table.name, datatable, crud);
             })
         },
-        tools: function (datatable) {
-            $(".tool-action").on("click", function () {
+        tools: function(datatable) {
+            $(".tool-action").on("click", function() {
                 var e = $(this).attr("data-action");
                 datatable.button(e).trigger()
             })
         },
         form: {
-            reCreate: function (form) {
+            reCreate: function(form) {
                 $("#form-content").empty();
                 $("#form-content").append(form);
             }
         },
         crud: {
             config: {},
-            create: function (datatable) {
+            create: function(datatable) {
 
             },
-            read: function (data) {
+            read: function(data) {
                 simpler.datatable.width.setSmall();
                 simpler.ajax.get(simpler.datatable.crud.config.read + data._id, simpler.datatable.form.reCreate);
             },
-            update: function () {
+            update: function() {
                 var url = $("#ajax-form").attr("action");
                 var obj = $("#ajax-form").serializeObject();
-                simpler.ajax.post(url, obj, function (result) {
+                simpler.ajax.post(url, obj, function(result) {
                     simpler.datatable.form.reCreate(result);
                     simpler.datatable.reload();
                 });
             },
-            delete: {}
+            delete: function(url) {
+                $.ajax({
+                    url: url, type: 'DELETE', error: function(result) {
+                        simpler.datatable.reload();
+                    }
+                });
+            }
 
         },
         width: {
-            setFull: function () {
+            setFull: function() {
                 $("#datatables-portlet").attr("class", "col-md-12");
                 $("#form-content").empty();
             },
-            setSmall: function () {
+            setSmall: function() {
                 $("#datatables-portlet").attr("class", "col-md-5");
 
             },
-            setHidden: function () { }
+            setHidden: function() { }
         },
         events: {
-            addAll: function (id, datatable, crud) {
+            addAll: function(id, datatable, crud) {
                 simpler.datatable.crud.config = crud;
                 simpler.datatable.events.click(id, datatable);
             },
-            click: function (datatableId, datatable) {
-                $(datatableId + ' tbody').on('click', 'tr', function () {
+            click: function(datatableId, datatable) {
+                $(datatableId + ' tbody').on('click', 'tr', function() {
                     if ($(this).hasClass('selected')) {
                         $(this).removeClass('selected');
                         simpler.datatable.width.setFull();
@@ -165,15 +171,15 @@ var simpler = {
 
 //Other Congfigurations
 
-String.prototype.turkishToUpper = function () {
+String.prototype.turkishToUpper = function() {
     var string = this;
     var letters = { "i": "İ", "ş": "Ş", "ğ": "Ğ", "ü": "Ü", "ö": "Ö", "ç": "Ç", "ı": "I" };
-    string = string.replace(/(([iışğüçö]))+/g, function (letter) { return letters[letter]; });
+    string = string.replace(/(([iışğüçö]))+/g, function(letter) { return letters[letter]; });
     return string.toUpperCase();
 }
 
 
-$.fn.serializeObject = function () {
+$.fn.serializeObject = function() {
 
     var self = this,
         json = {},
@@ -187,19 +193,19 @@ $.fn.serializeObject = function () {
         };
 
 
-    this.build = function (base, key, value) {
+    this.build = function(base, key, value) {
         base[key] = value;
         return base;
     };
 
-    this.push_counter = function (key) {
+    this.push_counter = function(key) {
         if (push_counters[key] === undefined) {
             push_counters[key] = 0;
         }
         return push_counters[key]++;
     };
 
-    $.each($(this).serializeArray(), function () {
+    $.each($(this).serializeArray(), function() {
 
         // skip invalid keys
         //if (!patterns.validate.test(this.name)) {

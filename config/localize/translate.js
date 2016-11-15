@@ -187,6 +187,10 @@ module.exports={
   isNew:{
     en:"Is New",
     tr:"Yeni mi"
+  },
+  undo:{
+    en:"Undo",
+    tr:"Geri Al"
   }
 
 }

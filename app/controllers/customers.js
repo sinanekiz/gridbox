@@ -18,7 +18,8 @@ router.get('/datatable', base.datatable);
 
 router.get('/edit/:_id?', base.edit);
 router.post('/create',   base.post);
-router.post('/edit/:_id?',   base.put);
+router.post('/edit/:_id',   base.put);
+router.delete('/delete/:_id',   base.delete);
 
 router.get('/createAll', async(function* (req, res) {
 

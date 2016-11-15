@@ -74,6 +74,11 @@ ArticleSchema.pre('remove', function (next) {
 /**
  * Methods
  */
+ArticleSchema.methods.assign = function () {
+  
+    return "title body tags";
+  
+}
 
 ArticleSchema.methods.uploadAndSave= function (image) {
   const err = this.validateSync();
@@ -141,12 +146,7 @@ ArticleSchema.methods.removeComment= function (commentId) {
  * Statics
  */
 
-ArticleSchema.statics.load = function (_id) {
-  return this.findOne({ _id })
-    .populate('user', 'name email username')
-    .populate('comments.user')
-    .exec();
-}
+ 
 
   /**
    * List articles

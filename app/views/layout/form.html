@@ -20,9 +20,10 @@
                     <li class="divider"> </li>
                     <% if !@model.isNew : %>
                     <li>
-                        <a class="font-red" onclick="simpler.datatable.crud.delete()">
+                        <a class="font-red" onclick="simpler.datatable.crud.delete('/<%=@controller%>/delete/<%-@model._id%>/')">
                             <i class="fa font-red fa-trash-o"></i>
-                            <%= @translate 'delete' %>
+                            <%= @translate 'delete' %> /
+                            <%= @translate 'undo' %>
                         </a>
                     </li>
                      <%end%>
