@@ -3,7 +3,7 @@
 
 <% @formGroup = (title,attr) -> %>
 
-            <div class="form-group form-md-line-input form-md-floating-label">
+            <div class="form-group form-md-line-input form-md-floating-label  has-info">
                 <input class="form-control <% if model[title] : %> edited <%end%>" id="<%-title%>" type='text' name="<%-title%>" value="<%- model[title] %>"
                     <%- attr %> />
                 <label for="<%-title%>"><%- translate title%></label>

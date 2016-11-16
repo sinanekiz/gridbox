@@ -10,9 +10,12 @@
                         <span class="caption-subject font-blue-steel bold"><%= @title%></span>
                     </div>
                     <div class="actions">
-                         <a class="btn blue-steel font-white btn-default  btn-circle "  onclick="simpler.datatable.crud.read({_id:''})">
-                            <i class="fa fa-plus"></i> <%= @translate 'createNew' %> </a>
-                        <a class="btn blue-steel font-white btn-default  btn-circle tool-action" data-action="5" title="<%= @translate 'columns' %>" href="#">
+                        <a class="btn blue-steel font-white btn-default  btn-circle " onclick="simpler.datatable.crud.read({_id:''})">
+                            <i class="fa fa-plus"></i>
+                            <%= @translate 'createNew' %>
+                        </a>
+                        <a class="btn blue-steel font-white btn-default  btn-circle tool-action" data-action="5" title="<%= @translate 'columns' %>"
+                            href="#">
                             <i class="fa fa-columns"></i> </a>
                         <div class="btn-group">
                             <a class="btn blue-steel font-white btn-default  btn-circle" href="javascript:;" title="<%= @translate 'tools' %>" data-toggle="dropdown">
@@ -68,17 +71,8 @@
 
         <link href="../assets/global/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css">
         <link href="../assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css" rel="stylesheet" type="text/css">
-        <style>
-            .dt-button-collection {
-                top: 27% !important;
-                left: 26% !important;
-                display: block;
-                z-index: 99999 !important;
-            }
-            .dataTables_processing{
-                z-index: 100 !important;
-            }
-        </style>
+        <link href="../css/datatable.custom.css" rel="stylesheet" type="text/css">
+        
         <% end %>
 
             <% block 'scripts' : %>
@@ -99,4 +93,4 @@
                 </script>
                 <% content 'datatable-scripts' %>
 
-                    <% end %>
+           <% end %>

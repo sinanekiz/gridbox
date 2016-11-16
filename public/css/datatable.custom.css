@@ -1,0 +1,23 @@
+.dt-button-collection {
+                top: 27% !important;
+                left: 26% !important;
+                display: block;
+                z-index: 99999 !important;
+            }
+            
+            .dataTables_processing {
+                z-index: 100 !important;
+                background-color: #395f9d !important;
+                color: white !important;
+                border-radius: 3px !important;
+                border: 0px !important;
+                box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.47) !important;
+            }
+            .pagination>.active>a,
+            .pagination>.active>a:focus,
+            .pagination>.active>a:hover,
+            .pagination>.active>span,
+            .pagination>.active>span:focus,
+            .pagination>.active>span:hover {
+                background-color: #395f9d !important;
+            }
