@@ -1,0 +1,22 @@
+<% extend 'layout/form' %>
+    <% include 'helpers' %>
+
+        <div class="form-body">
+            <div style="display:none">
+                <%- @formGroup "_id"  %>
+            </div>
+            <div class="col-md-6">
+                <%- @formGroup "name","required" %>
+            </div>
+            <div class="col-md-6">
+                <%- @formGroup "description" %>
+
+            </div>
+            <div class="col-md-12">
+                <%- @MultiSelectForEnum "rights",@rights %>
+                <%- @MultiSelectForEnum "rights",@rights %>
+            </div>
+        </div>
+
+
+        

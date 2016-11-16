@@ -118,7 +118,7 @@ var simpler = {
             },
             update: function () {
                 var url = $("#ajax-form").attr("action");
-                var obj = $("#ajax-form").serializeObject();
+                var obj = $("#ajax-form").serialize();
                 simpler.ajax.post(url, obj, function (result) {
                     simpler.datatable.form.reCreate(result);
                     simpler.datatable.reload();

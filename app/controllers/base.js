@@ -70,6 +70,7 @@ exports.configure = function (schema, controller) {
         }),
         put: async(function* (req, res) {
             const model = req.model;
+            console.log(req.body)
             Object.assign(model, only(req.body, model.assign()));
             try {
                 yield model.saveChanges();

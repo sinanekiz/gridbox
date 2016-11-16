@@ -80,7 +80,7 @@ baseSchema.statics.createDatatable = function (action = "datatable") {
         ajax: {
             url: action
         },
-        "scrollX": true,
+        scrollX: true,
         buttons: [{
             extend: "print",
             className: "btn dark btn-outline"

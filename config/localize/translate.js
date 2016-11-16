@@ -192,5 +192,29 @@ module.exports={
     en:"Undo",
     tr:"Geri Al"
   }
-
+,
+  description:{
+    en:"Description",
+    tr:"Açıklam"
+  },
+  right:{
+    en:"Right",
+    tr:"Yetki"
+  },
+  rights:{
+    en:"Rights",
+    tr:"Yetkiler"
+  },
+  role:{
+    en:"Role",
+    tr:"Rol"
+  },
+  roles:{
+    en:"Roles",
+    tr:"Roller"
+  },
+  type:{
+    en:"Type",
+    tr:"Tip"
+  }
 }
