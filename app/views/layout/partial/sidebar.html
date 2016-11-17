@@ -35,7 +35,9 @@
              { Title: "Modem Hatalari", HrefAttribute: "/modemException", Right: 1, ClassAttribute: "nav-item" }
          ]
      }
-
+     , { Title: '<%= @translate "management"%>', Icon: "icon-article", Right: 1, ClassAttribute: "heading",   }
+     , { Title: '<%= @translate "roles"%>', Icon: "icon-anchor", Right: 1, ClassAttribute: "nav-item", HrefAttribute: "/roles/index" }
+     
     ];
 
     function createSideBar(sidebar) {

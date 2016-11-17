@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
+const auth = require('../../config/middlewares/authorization');
 
-router.get('/', function (req, res) {
+router.get('/',auth.requiresLogin, function (req, res) {
     res.render('index');
 });
 

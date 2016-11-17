@@ -216,5 +216,10 @@ module.exports={
   type:{
     en:"Type",
     tr:"Tip"
+  },
+  management:{
+    en:"Management",
+    tr:"Yönetim"
   }
+
 }

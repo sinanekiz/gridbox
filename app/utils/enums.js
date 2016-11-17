@@ -17,47 +17,66 @@ const rights = {
     crud_branch_delete: 12,
 }
 
+const right = {
+    crud: {
+        user: {
+            read: 1,
+            create: 2,
+            update: 3,
+            delete: 4
+        }
+        ,
+        role: {
+            read: 5,
+            create: 6,
+            update: 7,
+            delete: 8,
+        },
+        branch: {
+            read: 9,
+            create: 10,
+            update: 11,
+            delete: 12,
+        }
+    },
+    management: {
+        site: 13,
+        user: 14
+    },
+    lockScreen: 15
+}
 
-module.exports.enumList = function(enumDatas) {
+module.exports.enumList = function (enumDatas) {
     var enums = [];
     for (var propertyName in enumDatas) {
         enums.push({ key: propertyName, value: enumDatas[propertyName] });
     }
     return enums;
 }
-
-module.exports.enumGroup = function(enumList) {
-
-    var parsedData = [];
-    for (var i = 0; i < enumList.length; i++) {
-        var enumParts = enumList.key.split("_");
-
-        parsedData.push({ group1: enumParts[0], group2: enumParts[1] || null, group3: enumParts[2] || null, key: enumList.key, value: enumList.value })
-
-        var distinctFirst = distict(parsedData);
-
-        distinctFirst.filter(function(distF) {
-           var group= parsedData.filter(function(data) {
-                return data.group1 == distF
-            });
-        });
-        parsedData.filter
-
-
-
-    }
-
-
+module.exports.enumGrup=function(enumDatas){
+        return enumGrups(enumDatas)
 }
-
-function distict(array) {
-    var flags = [], output = [], l = array.length, i;
-    for (i = 0; i < l; i++) {
-        if (flags[array[i].group1]) continue;
-        flags[array[i].group1] = true;
-        output.push(array[i].group1);
-    }
-    return output;
-}
-
 module.exports.rights = rights;
+module.exports.right = right;
+
+function enumGrups(enumDatas) {
+
+    var enums = [];
+    for (var propertyName in enumDatas) {
+        var obj = {}
+        if (typeof (enumDatas[propertyName]) == "object") {
+            enums.push({ group: propertyName, subGroups: enumGrups(enumDatas[propertyName]), singleElements: findSingleData(enumDatas[propertyName]) });
+        }
+    }
+    return enums;
+}
+
+function findSingleData(enumDatas) {
+    var enums = [];
+    for (var propertyName in enumDatas) {
+        if (typeof (enumDatas[propertyName]) != "object") {
+            enums.push({ key: propertyName, value: enumDatas[propertyName] });
+        }
+    }
+    return enums;
+}

@@ -20,33 +20,43 @@
 
 <% @MultiSelectForEnum = (title,enums,attr) -> %>
             <div class="form-group">
-                <label for="<%-title%>"><%- translate title%></label>
                <select multiple class="multiselects" id="<%-title%>"  name="<%-title%>" value="<%- model[title] %>"  <%- attr %> >
-               <optgroup label="Group 1" class="group-1">
                    <% for enumx in enums : %>
                       <option <% if model[title].indexOf(enumx.value) >-1 : %>selected<%end%> value="<%=enumx.value%>"><%= enumx.key%></option>
                    <% end %>
-               </optgroup>
                 </select>
                 <span class="help-block"> </span>
             </div>
             <script>
-
-$(function(){
-
- 
-                $('.multiselects').multiselect({
-                    includeSelectAllOption: true,
-                      enableClickableOptGroups:true,
-                    enableCollapsibleOptGroups: true,
-                    disableIfEmpty: !0,
-                    enableFiltering: true,
-                    dropRight: true,
-                    buttonWidth: "100%" ,
-                    buttonClass: "btn blue-steel btn-outline"
-                });
-           
-});
-
-</script>
+                 $(function(){
+                    $('.multiselects').multiselect({
+                        includeSelectAllOption: true,
+                          enableClickableOptGroups:true,
+                        enableCollapsibleOptGroups: true,
+                        disableIfEmpty: !0,
+                        enableFiltering: true,
+                        dropRight: true,
+                        buttonWidth: "100%" ,
+                        buttonClass: "btn blue-steel btn-outline"
+                    });
+                 });
+            </script>
 <% end %>
+
+<% @GroupedMultiSelectForEnum = (rightGroup,title) -> %>
+    <% for grup in rightGroup : %>
+        <div class="col-md-<%= 12/rightGroup.length%>">
+          <div class="panel panel-info">
+             <div class="panel-heading">
+               <h3 class="panel-title"><%= grup.group%> </h3>
+               </div>
+               <div class="panel-body"> 
+                  <%- @GroupedMultiSelectForEnum grup.subGroups,title %>
+                  <% if grup.singleElements.length >0 :%>
+                      <%- @MultiSelectForEnum title,(grup.singleElements) %>    
+                   <% end %>
+               </div>
+           </div>
+        </div>
+    <% end %>
+<%end%>
