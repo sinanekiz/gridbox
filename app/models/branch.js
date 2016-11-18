@@ -6,11 +6,11 @@ var base = require('./base');
 
 const Branch = base.extend({
     name: { type: String, default: '' },
-    childs: [{
+    childs:{type: [{
         type: String,
-        ref: 'Branch',
-        hideTable: true
+        ref: 'Branch'
     }],
+        hideTable: true},
     parent: {
         type: String,
         ref: 'Branch',
@@ -23,4 +23,5 @@ Branch.methods.assign = function () {
     return "name childs parent province";
 }
 
+ 
 mongoose.model('Branch', Branch);

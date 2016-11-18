@@ -220,6 +220,14 @@ module.exports={
   management:{
     en:"Management",
     tr:"Yönetim"
+  },
+  branches:{
+    en:"Branches",
+    tr:"İşletmeler"
+  },
+  branch:{
+    en:"Branch",
+    tr:"İşletme"
   }
 
 }

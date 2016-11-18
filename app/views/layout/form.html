@@ -5,9 +5,10 @@
             <span class="caption-subject bold uppercase"> <%= @translate 'general' %></span>
         </div>
         <div class="actions">
+            <a class="btn btn-sm btn-circle default" id="full-screen" onclick="simpler.form.width.setFull();$(this).toggle();$('#small-screen').toggle();" title="genişlet"><i class="fa fa-long-arrow-left"></i> </a>
+            <a class="btn btn-sm btn-circle default" id="small-screen" onclick="simpler.form.width.setSmall();$(this).toggle();$('#full-screen').toggle();" style="display:none"  title="daralt" ><i class="fa fa-long-arrow-right"></i> </a>
             <div class="btn-group">
-                 <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
-                <a class="btn btn-sm default dropdown-toggle" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                <a class="btn btn-sm btn-circle default dropdown-toggle" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
                     <%= @translate 'proceses' %>
                         <i class="fa fa-angle-down"></i>
                 </a>
@@ -21,7 +22,7 @@
                     <li class="divider"> </li>
                     <% if !@model.isNew : %>
                     <li>
-                        <a class="font-red" onclick="simpler.datatable.crud.delete('/<%=@controller%>/delete/<%-@model._id%>/')">
+                        <a class="font-red" onclick="simpler.form.crud.delete('/<%=@controller%>/delete/<%-@model._id%>/')">
                             <i class="fa font-red fa-trash-o"></i>
                             <%= @translate 'delete' %> /
                             <%= @translate 'undo' %>
@@ -37,7 +38,7 @@
         <form role="form" id="ajax-form" method="POST" action="/<%=@controller%>/<% if !@model.isNew : %>edit/<%-@model._id%><%else:%>create<%end%>">
              <% content %>
             <div class="form-actions noborder align-right">
-                <button type="button" onclick="simpler.datatable.crud.update()" class="btn blue-steel"><%= @translate "save"%></button>
+                <button type="button" onclick="simpler.form.crud.update()" class="btn blue-steel"><%= @translate "save"%></button>
                 <button type="button" onclick="simpler.datatable.width.setFull()" class="btn default"><%= @translate "cancel"%></button>
             </div>
         </form>
