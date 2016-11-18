@@ -8,9 +8,6 @@ const Branch = mongoose.model('Branch');
 
 const base = require('../base').configure(Branch, "branches");
 
-
-
-
 router.param('_id', base.findOne);
 
 router.get('/index', base.index);
@@ -24,19 +21,31 @@ router.delete('/delete/:_id', base.delete);
 //page level 
 
 router.get('/tree', async(function* (req, res) {
-    var trees = []
-    var tree = schema.createDatatable();
-    trees.push(tree);
-
-    res.render(controller + '/index', {
-        trees: trees,
+    var tree =yield Branch.list({});
+   tree= tree.filter(function(t){
+        t.id=t._id;
+        t.text=t.name;
+    })
+    res.render( 'branches/tree', {
+        tree:tree,
         crud: {
-            create: "/" + controller + "/edit/",
-            update: "/" + controller + "/edit/",
-            delete: "/" + controller + "/delete/",
-            read: "/" + controller + "/edit/",
+            create: "/" + "branches" + "/edit/",
+            update: "/" + "branches" + "/edit/",
+            delete: "/" + "branches" + "/delete/",
+            read: "/" + "branches" + "/edit/",
         }
     });
+}));
+
+
+router.get('/treeData', async(function* (req, res) {
+     
+    var tree =yield Branch.list({});
+    tree=tree.filter(function(t){
+        t.id=t._id;
+        t.text=t.name;
+    })
+    res.send(tree);
 }));
 
 

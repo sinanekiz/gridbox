@@ -1,2 +1,23 @@
 <%@title= @translate 'branches'%> 
  <% extend 'layout/plugin/tree' %>
+
+
+
+
+
+ <% block 'tree-scripts':%>
+<script>
+
+$(function(){
+$('#jstree').jstree({
+'core' : {
+  'data' : {
+    'url' : '/branches/treeData'
+  }
+}});
+
+})
+</script>
+
+
+ <%end%>

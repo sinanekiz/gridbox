@@ -110,9 +110,6 @@ baseSchema.statics.createDatatable = function (action = "datatable") {
     return datatable;
 }
 
-
-
-
 baseSchema.statics.load = function (options, cb) {
     return this.findOne(options.criteria).exec(cb);
 }
@@ -124,28 +121,12 @@ baseSchema.statics.new = function (newObj) {
     return new this();
 }
 
-
-
-
-baseSchema.statics.updateSave = function (model, next) {
-    return this.findOne({ _id: model._id }).exec(function (er, data) {
-        if (er) throw new Error(er.toString());
-
-        Object.assign(data, only(model, data.assign(model)));
-        var err = data.validateSync();
-        console.log(err);
-        if (err && err.toString()) throw new Error(err.toString());
-        data.save();
-        next(data);
-    });
-}
-baseSchema.statics.createSave = function (model) {
-    console.log(model);
-    var newobj = new this(model);
-    var err = newobj.validateSync();
-    if (err && err.toString()) throw new Error(err.toString());
-    newobj.save();
-    return newobj;
+baseSchema.statics.list = function (options) {
+    const criteria = options.criteria || {};
+    criteria.recordStatus = true;
+    return this.find(criteria)
+        .sort({ createdAt: -1 })
+        .exec();
 }
 
 module.exports = baseSchema;

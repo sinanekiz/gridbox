@@ -23,4 +23,5 @@ Branch.methods.assign = function () {
     return "name childs parent province";
 }
 
+ 
 mongoose.model('Branch', Branch);
