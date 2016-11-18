@@ -79,33 +79,11 @@ var simpler = {
             });
         }
     },
-    datatable: {
-        allTables: [],
-        reload: function () {
-            simpler.datatable.allTables.filter(function (table) {
-                table.ajax.reload();
-            });
-        },
-        create: function (datatables, crud) {
-            datatables.filter(function (table) {
-                $("#datatables").append("<table id='" + table.name + "'  style='width:100%'>")
-                var datatable = $('#' + table.name).DataTable(table);
-                simpler.datatable.allTables.push(datatable);
-                simpler.datatable.tools(datatable);
-                simpler.datatable.events.addAll('#' + table.name, datatable, crud);
-            })
-        },
-        tools: function (datatable) {
-            $(".tool-action").on("click", function () {
-                var e = $(this).attr("data-action");
-                datatable.button(e).trigger()
-            })
-        },
-        form: {
-            reCreate: function (form) {
-                $("#form-content").empty();
-                $("#form-content").append(form);
-            }
+    form: {
+        dom: $("#form-portlet"),
+        reCreate: function (form) {
+            simpler.form.dom.empty();
+            simpler.form.dom.append(form);
         },
         crud: {
             config: {},
@@ -113,14 +91,14 @@ var simpler = {
 
             },
             read: function (data) {
-                simpler.datatable.width.setSmall();
-                simpler.ajax.get(simpler.datatable.crud.config.read + data._id, simpler.datatable.form.reCreate);
+                simpler.form.width.setSmall();
+                simpler.ajax.get(simpler.form.crud.config.read + data._id, simpler.form.reCreate);
             },
             update: function () {
                 var url = $("#ajax-form").attr("action");
                 var obj = $("#ajax-form").serialize();
                 simpler.ajax.post(url, obj, function (result) {
-                    simpler.datatable.form.reCreate(result);
+                    simpler.form.reCreate(result);
                     simpler.datatable.reload();
                 });
             },
@@ -135,20 +113,70 @@ var simpler = {
         },
         width: {
             setFull: function () {
-                $("#datatables-portlet").attr("class", "col-md-12");
-                $(window).resize()
-                $("#form-content").empty();
-
+                simpler.form.dom.attr("class", "col-md-12");
+                simpler.form.dom.css("display", "");
+                simpler.datatable.width.setHidden();
             },
             setSmall: function () {
-                $("#datatables-portlet").attr("class", "col-md-5");
-                $(window).resize()
+                simpler.form.dom.attr("class", "col-md-7");
+                simpler.form.dom.css("display", "");
+                if (!simpler.datatable.dom.hasClass("col-md-5")) {
+                    simpler.datatable.width.setSmall();
+                }
             },
-            setHidden: function () { }
+            setHidden: function () {
+                simpler.form.dom.css("display", "none");
+                simpler.form.dom.attr("class", "");
+            }
+
+        }
+    },
+    datatable: {
+        dom: $("#datatables-portlet"),
+        allTables: [],
+        reload: function () {
+            simpler.datatable.allTables.filter(function (table) {
+                table.ajax.reload();
+            });
+        },
+        create: function (datatables, crud) {
+            datatables.filter(function (table) {
+                $("#datatables").append("<table id='" + table.name + "'  style='width:100%'>")
+                var datatable = $('#' + table.name).DataTable(table);
+                simpler.datatable.allTables.push(datatable);
+                simpler.datatable.tools(datatable);
+                simpler.form.crud.config = crud;
+                simpler.datatable.events.addAll('#' + table.name, datatable);
+            })
+        },
+        tools: function (datatable) {
+            $(".tool-action").on("click", function () {
+                var e = $(this).attr("data-action");
+                datatable.button(e).trigger()
+            })
+        },
+        width: {
+            setFull: function () {
+                simpler.datatable.dom.attr("class", "col-md-12");
+                $(window).resize()
+                simpler.datatable.dom.css("display", "");
+                simpler.form.width.setHidden();
+            },
+            setSmall: function () {
+                simpler.datatable.dom.attr("class", "col-md-5");
+                $(window).resize()
+                simpler.datatable.dom.css("display", "");
+                if (!simpler.form.dom.hasClass("col-md-7")) {
+                    simpler.form.width.setSmall();
+                }
+            },
+            setHidden: function () {
+                simpler.datatable.dom.css("display", "none");
+                simpler.datatable.dom.attr("class", "");
+            }
         },
         events: {
-            addAll: function (id, datatable, crud) {
-                simpler.datatable.crud.config = crud;
+            addAll: function (id, datatable) {
                 simpler.datatable.events.click(id, datatable);
             },
             click: function (datatableId, datatable) {
@@ -161,7 +189,7 @@ var simpler = {
                         datatable.$('tr.selected').removeClass('selected');
                         $(this).addClass('selected');
                         var data = datatable.row(this).data();
-                        simpler.datatable.crud.read(data);
+                        simpler.form.crud.read(data);
                     }
 
                 });

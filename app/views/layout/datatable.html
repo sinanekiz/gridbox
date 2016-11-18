@@ -10,15 +10,12 @@
                         <span class="caption-subject font-blue-steel bold"><%= @title%></span>
                     </div>
                     <div class="actions">
-                        <a class="btn blue-steel font-white btn-default  btn-circle " onclick="simpler.datatable.crud.read({_id:''})">
-                            <i class="fa fa-plus"></i>
-                            <%= @translate 'createNew' %>
-                        </a>
-                        <a class="btn blue-steel font-white btn-default  btn-circle tool-action" data-action="5" title="<%= @translate 'columns' %>"
+                        
+                        <a class="btn btn-sm btn-circle default  tool-action" data-action="5" title="<%= @translate 'columns' %>"
                             href="#">
                             <i class="fa fa-columns"></i> </a>
                         <div class="btn-group">
-                            <a class="btn blue-steel font-white btn-default  btn-circle" href="javascript:;" title="<%= @translate 'tools' %>" data-toggle="dropdown">
+                            <a class="btn btn-sm btn-circle default" href="javascript:;" title="<%= @translate 'tools' %>" data-toggle="dropdown">
                                 <i class="fa fa-share"></i>
                                 <i class="fa fa-angle-down"></i>
                             </a>
@@ -56,13 +53,17 @@
                                 </li>
                             </ul>
                         </div>
+                        <a class="btn blue-steel font-white btn-default  btn-circle " onclick="simpler.form.crud.read({_id:''})">
+                            <i class="fa fa-plus"></i>
+                            <%= @translate 'createNew' %>
+                        </a>
                     </div>
                 </div>
                 <div class="portlet-body" id="datatables">
                 </div>
             </div>
         </div>
-        <div class="col-md-7" id=form-content>
+        <div class="col-md-7" id=form-portlet>
             <% content %>
         </div>
     </div>
