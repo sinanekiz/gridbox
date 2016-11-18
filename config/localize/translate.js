@@ -228,6 +228,10 @@ module.exports={
   branch:{
     en:"Branch",
     tr:"İşletme"
+  },
+  parent:{
+    en:"Parent",
+    tr:"Üst İşletme"
   }
 
 }

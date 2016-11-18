@@ -1,23 +1,55 @@
-<%@title= @translate 'branches'%> 
- <% extend 'layout/plugin/tree' %>
+<%@title= @translate 'branches'%>
+  <% extend 'layout/plugin/tree' %>
 
 
-
-
-
- <% block 'tree-scripts':%>
-<script>
+    <% block 'tree-scripts':%>
+      <script>
 
 $(function(){
 $('#jstree').jstree({
-'core' : {
-  'data' : {
-    'url' : '/branches/treeData'
-  }
-}});
+  "core" : {
+     "check_callback" : true,
+     'data' : {
+      'url' :  '/branches/treeList' , 
+    }
+  },
+  "types" : {
+    "#" : { 
+      "valid_children" : ["Branch"]
+    },
+    "Branch" : {
+      "icon" : "fa fa-building",
+      "valid_children" : ["Branch","District"]
+    },
+    "District" : {
+       "icon" : "fa fa-map",
+       "valid_children" : []
+    } 
+  },
+  "plugins" : [
+    "contextmenu", "dnd", "search",
+    "state", "types", "wholerow"
+  ]
+}).on('changed.jstree', function (e, data) {
+    var i, j, r = [];
+    for(i = 0, j = data.selected.length; i < j; i++) {
+      r.push(data.instance.get_node(data.selected[i]).id);
+    }
+    r[0]?simpler.form.crud.read({_id:r[0]}):null;
+    console.log(r)
+  }).on('move_node.jstree', function (e, data) {
+      simpler.form.crud.read({_id:data.node.id},function(result){ 
+        console.log(data.parent)
+         $("#parent").val(data.parent);
+         $("#save-form").click();
+     });
+
+     ;
+     
+  }); 
 
 })
 </script>
 
 
- <%end%>
+      <%end%>

@@ -38,7 +38,7 @@
         <form role="form" id="ajax-form" method="POST" action="/<%=@controller%>/<% if !@model.isNew : %>edit/<%-@model._id%><%else:%>create<%end%>">
              <% content %>
             <div class="form-actions noborder align-right">
-                <button type="button" onclick="simpler.form.crud.update()" class="btn blue-steel"><%= @translate "save"%></button>
+                <button type="button" id="save-form" onclick="simpler.form.crud.update()" class="btn blue-steel"><%= @translate "save"%></button>
                 <button type="button" onclick="simpler.datatable.width.setFull()" class="btn default"><%= @translate "cancel"%></button>
             </div>
         </form>

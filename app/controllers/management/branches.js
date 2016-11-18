@@ -21,13 +21,13 @@ router.delete('/delete/:_id', base.delete);
 //page level 
 
 router.get('/tree', async(function* (req, res) {
-    var tree =yield Branch.list({});
-   tree= tree.filter(function(t){
-        t.id=t._id;
-        t.text=t.name;
+    var tree = yield Branch.list({});
+    tree = tree.filter(function (t) {
+        t.id = t._id;
+        t.text = t.name;
     })
-    res.render( 'branches/tree', {
-        tree:tree,
+    res.render('branches/tree', {
+        tree: tree,
         crud: {
             create: "/" + "branches" + "/edit/",
             update: "/" + "branches" + "/edit/",
@@ -37,15 +37,29 @@ router.get('/tree', async(function* (req, res) {
     });
 }));
 
+router.get('/all', async(function* (req, res) {
 
-router.get('/treeData', async(function* (req, res) {
-     
-    var tree =yield Branch.list({});
-    tree=tree.filter(function(t){
-        t.id=t._id;
-        t.text=t.name;
-    })
-    res.send(tree);
+    var all = yield Branch.list({});
+
+    res.send({ value: all });
+}));
+
+router.get('/treeList', async(function* (req, res) {
+
+    var tree = yield Branch.list({});
+    var data = []
+    tree.filter(function (t) {
+        data.push({
+            id: t._id,
+            text: t.name,
+            parent: t.parent || "#",
+            state: {
+                opened: true
+            },
+            type:t.__t
+        })
+    });
+    res.send(data);
 }));
 
 

@@ -50,7 +50,7 @@ var simpler = {
         createSelectDom: function (data, selectedId, inputId) {
             var list = "<option value=''>Seçiniz</option>";
             for (var index = 0; index < data.length; index++) {
-                list += "<option value='" + data[index].Id + "' text='" + data[index].Name.turkishToUpper() + "' >" + data[index].Name + "</option>";
+                list += "<option value='" + data[index]._id + "' text='" + data[index].name.turkishToUpper() + "' >" + data[index].name + "</option>";
             }
             if (selectedId == 0) { selectedId = ""; }
 
@@ -90,22 +90,27 @@ var simpler = {
             create: function (datatable) {
 
             },
-            read: function (data) {
+            read: function (data, callback) {
                 simpler.form.width.setSmall();
-                simpler.ajax.get(simpler.form.crud.config.read + data._id, simpler.form.reCreate);
+                simpler.ajax.get(simpler.form.crud.config.read + data._id, function (result) {
+                    simpler.form.reCreate(result);
+                    callback ? callback(result) : null;
+                });
             },
-            update: function () {
+            update: function (callback) {
                 var url = $("#ajax-form").attr("action");
                 var obj = $("#ajax-form").serialize();
                 simpler.ajax.post(url, obj, function (result) {
                     simpler.form.reCreate(result);
                     simpler.datatable.reload();
+                    callback ? callback(result) : null;
                 });
             },
-            delete: function (url) {
+            delete: function (url, callback) {
                 $.ajax({
                     url: url, type: 'DELETE', error: function (result) {
                         simpler.datatable.reload();
+                        callback ? callback(result) : null;
                     }
                 });
             }
