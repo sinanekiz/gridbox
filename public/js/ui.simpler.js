@@ -132,7 +132,7 @@ var simpler = {
         }
     },
     datatable: {
-        dom: $("#datatables-portlet"),
+        dom: $("#data-portlet"),
         allTables: [],
         reload: function () {
             simpler.datatable.allTables.filter(function (table) {
@@ -181,6 +181,9 @@ var simpler = {
             },
             click: function (datatableId, datatable) {
                 $(datatableId + ' tbody').on('click', 'tr', function () {
+                    var t = (document.all) ? document.selection.createRange().text : document.getSelection();
+                    if (t != "") return;
+
                     if ($(this).hasClass('selected')) {
                         $(this).removeClass('selected');
                         simpler.datatable.width.setFull();

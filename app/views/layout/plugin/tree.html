@@ -1,0 +1,45 @@
+<% extend 'layout/layout' %>
+
+
+    <div class="row">
+        <div class="col-md-12" id="data-portlet">
+            <div class="portlet light bordered ">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-list-ul font-blue-steel"></i>
+                        <span class="caption-subject font-blue-steel bold"><%= @title%></span>
+                    </div>
+                    <div class="actions">
+                        <a class="btn blue-steel font-white btn-default  btn-circle " onclick="simpler.form.crud.read({_id:''})">
+                            <i class="fa fa-plus"></i>
+                            <%= @translate 'createNew' %>
+                        </a>
+                    </div>
+                </div>
+                <div class="portlet-body" id="trees">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7" id=form-portlet>
+            <% content %>
+        </div>
+    </div>
+
+    <% block 'styles' : %>
+        <link href="../assets/global/plugins/jstree/dist/themes/default/style.min.css" rel="stylesheet" type="text/css">
+    <% end %>
+
+     <% block 'scripts' : %>
+         <script src="../assets/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script>
+         <script type="text/javascript">
+                     $(document).ready(function () {
+                         $(".menu-toggler").click();
+                          var datatables=<%- JSON.stringify @datatables %> || [];
+                          var crud=<%- JSON.stringify @crud %> || {};
+                            simpler.datatable.create(datatables,crud);
+                     });
+        </script>
+
+        <% content 'datatable-scripts' %>
+
+      <% end %>
