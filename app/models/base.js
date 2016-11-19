@@ -27,7 +27,8 @@ const baseSchema = new Schema({
     branch: {
         type: String,
         ref: 'Branch',
-        hideTable: true
+        hideTable: true,
+        default:null
     },
     createdAt: {
         type: Date,

@@ -37,6 +37,10 @@ exports.configure = function (schema, controller) {
         datatable: async(function* (req, res, next) {
             schema.dataTable(req.query, function (err, data) { return res.send(data); });
         }),
+        all: async(function* (req, res) {
+            var all = yield schema.list({});
+            res.send({ value: all });
+        }),
         edit: async(function* (req, res) {
             var model = schema.new();
             if (req.params._id) {
@@ -50,6 +54,8 @@ exports.configure = function (schema, controller) {
         post: async(function* (req, res) {
             const model = schema.new(req.body);
             //model.user = req.user;
+            console.log(model)
+
             try {
                 yield model.saveChanges();
                 respondOrRedirect({ req, res }, `/${controller}/edit/${model._id}`, {
@@ -74,7 +80,7 @@ exports.configure = function (schema, controller) {
             Object.assign(model, only(req.body, model.assign()));
             try {
                 yield model.saveChanges();
-                respondOrRedirect({ req,res }, `/${controller}/edit/${model._id}`, {
+                respondOrRedirect({ req, res }, `/${controller}/edit/${model._id}`, {
                     model: model,
                     controller: controller
                 }, {
@@ -92,7 +98,7 @@ exports.configure = function (schema, controller) {
         }),
         delete: async(function* (req, res) {
             yield req.model.remove();
-            respondOrRedirect({ req, res }, controller+"/index", {}, {
+            res.send({
                 type: 'info',
                 text: 'Deleted successfully'
             });

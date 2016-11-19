@@ -6,7 +6,8 @@
       <script>
 
 $(function(){
-$('#jstree').jstree({
+  var count =0;
+var tree=$('#jstree').jstree({
   "core" : {
      "check_callback" : true,
      'data' : {
@@ -30,25 +31,25 @@ $('#jstree').jstree({
     "contextmenu", "dnd", "search",
     "state", "types", "wholerow"
   ]
-}).on('changed.jstree', function (e, data) {
-    var i, j, r = [];
-    for(i = 0, j = data.selected.length; i < j; i++) {
-      r.push(data.instance.get_node(data.selected[i]).id);
-    }
-    r[0]?simpler.form.crud.read({_id:r[0]}):null;
-    console.log(r)
+}).on('select_node.jstree', function (e, data) {
+     if(count==0){count++; return;}
+     simpler.form.crud.read({_id:data.node.id}) ;
+
   }).on('move_node.jstree', function (e, data) {
       simpler.form.crud.read({_id:data.node.id},function(result){ 
         console.log(data.parent)
          $("#parent").val(data.parent);
          $("#save-form").click();
-     });
+      });
 
-     ;
-     
-  }); 
+    });
+ 
+   simpler.form.reloadData=function(){
+        count=0
+        tree.jstree("refresh");
+    }
 
-})
+});
 </script>
 
 

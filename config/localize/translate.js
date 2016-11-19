@@ -4,8 +4,8 @@ module.exports={
   "Testing...": {
     "es": "Pruebas...",
     "sr": "тестирање...",
-    "en": "Testing en",
-    "tr": "Testing tr"
+    "en": "Testing...",
+    "tr": "Test Ediliyor..."
   },
   "Substitution: $[1]": {
     "en": "Sustitución: $[1]",

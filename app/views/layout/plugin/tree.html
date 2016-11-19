@@ -32,7 +32,9 @@
 
      <% block 'scripts' : %>
          <script src="../assets/global/plugins/jstree/dist/jstree.min.js" type="text/javascript"></script>
-         <script>simpler.form.crud.config=<%- JSON.stringify @crud%></script>
+         <script>
+            simpler.form.crud.config=<%- JSON.stringify @crud%>
+         </script>
          <% content 'tree-scripts' %>
 
       <% end %>

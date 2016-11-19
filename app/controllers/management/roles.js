@@ -25,4 +25,6 @@ router.post('/create', base.post);
 router.post('/edit/:_id', base.put);
 router.delete('/delete/:_id', base.delete);
 
+router.get('/all', base.all);
+
 module.exports = router;

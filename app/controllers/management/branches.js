@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 const enums = require('../../utils/enums');
+const { respond, respondOrRedirect } = require('../../utils');
 const { wrap: async } = require('co');
 
 const Branch = mongoose.model('Branch');
@@ -16,7 +17,14 @@ router.get('/datatable', base.datatable);
 router.get('/edit/:_id?', base.edit);
 router.post('/create', base.post);
 router.post('/edit/:_id', base.put);
-router.delete('/delete/:_id', base.delete);
+router.delete('/delete/:_id', async(function* (req, res, next) {
+    var childs = yield Branch.list({criteria:{parent: req.params._id}});
+    if (!childs.length){ return next();}
+    res.json({
+        type: 'error',
+        text: 'Please move this branch sub branches before delete'
+    });
+}), base.delete);
 
 //page level 
 
@@ -37,12 +45,7 @@ router.get('/tree', async(function* (req, res) {
     });
 }));
 
-router.get('/all', async(function* (req, res) {
-
-    var all = yield Branch.list({});
-
-    res.send({ value: all });
-}));
+router.get('/all', base.all);
 
 router.get('/treeList', async(function* (req, res) {
 
@@ -56,7 +59,7 @@ router.get('/treeList', async(function* (req, res) {
             state: {
                 opened: true
             },
-            type:t.__t
+            type: t.__t
         })
     });
     res.send(data);

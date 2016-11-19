@@ -28,6 +28,19 @@ const UserSchema = base.extend({
   username: { type: String, default: '' },
   provider: { type: String, default: '' },
   hashed_password: { type: String, default: '', hideTable: true },
+  branchRoles: {
+    type: [{
+      branch: {
+        type: String,
+        ref: 'Branch'
+      },
+      roles: [{
+        type: String,
+        ref: 'Role'
+      }]
+    }]
+    , hideTable: true
+  },
   salt: { type: String, default: '', hideTable: true },
   authToken: { type: String, default: '', hideTable: true },
   facebook: { type: {}, hideTable: true },
@@ -163,9 +176,9 @@ UserSchema.methods.skipValidation = function () {
 
 UserSchema.methods.assign = function () {
   if (this.password) {
-    return "name email username password";
+    return "name email username branchRoles password";
   }
-  return "name email username";
+  return "name email username branchRoles";
 }
 
 
@@ -175,7 +188,7 @@ UserSchema.methods.assign = function () {
  */
 
 UserSchema.statics.load = function (options, cb) {
-  options.select = options.select || 'name username email';
+  options.select = options.select || 'name username email branchRoles';
   return this.findOne(options.criteria)
     .select(options.select)
     .exec(cb);

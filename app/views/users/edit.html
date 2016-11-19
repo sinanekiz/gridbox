@@ -14,4 +14,73 @@
                 <%- @formGroup "username" %>
                     <%- @formGroup "password" %>
             </div>
+            <div class="col-md-12">
+                <div class="portlet box blue">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-gift"></i>Branch Roles </div>
+                        <div class="tools">
+                            <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                            <a href="" class="fullscreen" data-original-title="" title=""> </a>
+                        </div>
+                        <div class="actions">
+                            <a href="javascript:;" class="btn btn-default btn-sm">
+                                <i class="fa fa-pencil"></i> Add </a>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="table-scrollable">
+                            <table class="table table-striped table-bordered table-advance table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <i class="fa fa-building"></i>
+                                            <%= @translate "branch"%>
+                                        </th>
+                                        <th>
+                                            <i class="fa fa-anchor"></i>
+                                            <%= @translate "roles"%>
+                                        </th>
+                                        <th># </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% count=0%>
+                                     <% for brancRole in @model.branchRoles||[] : %>
+                                            <tr id="brancRole_tr_<%= count%>">
+                                                <td class="highlight">
+                                                    <select class="branch" id="branchRoles_[<%= count%>]_branch" name="branchRoles[<%= count%>][branch]" value="<%=brancRole.branch%>"></select>
+                                                </td>
+                                                <td>
+                                                    <select multiple class="roles" id="branchRoles_[<%= count%>]_roles" name="branchRoles[<%= count%>][roles]"   value="<%=brancRole.roles%>"></select>
+                                                </td>
+                                                <td>
+                                                    <a  onclick="$('#brancRole_tr_<%= count%>').remove()" class="btn btn-outline btn-circle dark btn-sm black">
+                                                    <i class="fa fa-trash-o"></i> Delete </a>
+                                                </td>
+                                            </tr>
+                                           <% count++%>
+                                     <% end %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <script>
+             
+               simpler.selectList.createLists({
+                   domId:".branch",
+                   url:"/branches/all",
+                   selectedId:null
+               })
+              simpler.selectList.createLists({
+                   domId:".roles",
+                   url:"/roles/all",
+                   selectedId:null
+               })
+
+
+        </script>

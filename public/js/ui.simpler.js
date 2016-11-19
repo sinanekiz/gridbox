@@ -25,15 +25,18 @@ var simpler = {
         error: function (message) {
             $.bootstrapGrowl(message, { ele: "body", type: "danger", offset: { from: "bottom", amount: 20 }, align: "Right" });
         },
+        info: function (message) {
+            $.bootstrapGrowl(message, { ele: "body", type: "info", offset: { from: "bottom", amount: 20 }, align: "Right" });
+        },
         default: function (response) {
             $("#editFormWaiting").modal('hide');
 
-            if (response.status) {
-                simpler.notification.success(response.message);
-            } else if (!response.status) {
-                simpler.notification.error(response.message);
-            } else {
-                simpler.notification.success("İşlem başarıyla tamamlandı");
+            if (response.type == "success") {
+                simpler.notification.success(response.text);
+            } else if (response.type == "error") {
+                simpler.notification.error(response.text);
+            } else if (response.type == "info") {
+                simpler.notification.info(response.text);
             }
         }
     }
@@ -45,7 +48,8 @@ var simpler = {
         pushList: function (list, selectedId, inputId) {
             $(inputId).empty();
             $(inputId).append(list);
-            $(inputId).val(selectedId);
+            if(selectedId){$(inputId).val(selectedId);}
+            else{$(inputId).val($(inputId).attr("value"));}
         },
         createSelectDom: function (data, selectedId, inputId) {
             var list = "<option value=''>Seçiniz</option>";
@@ -102,19 +106,25 @@ var simpler = {
                 var obj = $("#ajax-form").serialize();
                 simpler.ajax.post(url, obj, function (result) {
                     simpler.form.reCreate(result);
-                    simpler.datatable.reload();
+                    simpler.form.reloadData();
                     callback ? callback(result) : null;
                 });
             },
             delete: function (url, callback) {
                 $.ajax({
-                    url: url, type: 'DELETE', error: function (result) {
-                        simpler.datatable.reload();
+                    url: url, type: 'DELETE', success: function (result) {
+                        simpler.notification.default(result);
+                        simpler.form.reloadData();
                         callback ? callback(result) : null;
                     }
                 });
             }
 
+        },
+        reloadData: function () {
+            //default reload data plugin,
+            // you can override this method if use another data plugin 
+            simpler.datatable.reload();
         },
         width: {
             setFull: function () {
@@ -163,14 +173,14 @@ var simpler = {
         width: {
             setFull: function () {
                 simpler.datatable.dom.attr("class", "col-md-12");
-                $(window).resize()
                 simpler.datatable.dom.css("display", "");
+                $(window).resize()
                 simpler.form.width.setHidden();
             },
             setSmall: function () {
                 simpler.datatable.dom.attr("class", "col-md-5");
-                $(window).resize()
                 simpler.datatable.dom.css("display", "");
+                $(window).resize()
                 if (!simpler.form.dom.hasClass("col-md-7")) {
                     simpler.form.width.setSmall();
                 }
