@@ -1,70 +1,93 @@
 <% extend 'layout/form' %>
     <% include 'helpers' %>
 
+        <% @Repeater = (count) -> %>
+            <tr id="brancRole_tr_<%= count%>">
+                <td class="highlight">
+                    <%- @Select ("branchRoles["+count+"].[branch]"),[],{url:"/branches/all"} %>
+                </td>
+                <td>
+                    <%- @MultiSelectForEnum ("branchRoles["+count+"].[roles]"),[],{url:"/roles/all"} %>
+                </td>
+                <td>
+                    <div class="form-group form-md-line-input form-md-floating-label  has-info">
 
-        <div class="form-body">
-            <div style="display:none">
-                <%- @formGroup "_id"  %>
-            </div>
-            <div class="col-md-6">
-                <%- @formGroup "name","required" %>
-                    <%- @formGroup "email" %>
-            </div>
-            <div class="col-md-6">
-                <%- @formGroup "username" %>
-                    <%- @formGroup "password" %>
-            </div>
-            <div class="col-md-12">
-                <div class="portlet box blue">
-                    <div class="portlet-title">
-                        <div class="caption">
-                            <i class="fa fa-gift"></i>Branch Roles </div>
-                        <div class="tools">
-                            <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
-                            <a href="" class="fullscreen" data-original-title="" title=""> </a>
-                        </div>
-                        <div class="actions">
-                            <a href="javascript:;" class="btn btn-default btn-sm">
-                                <i class="fa fa-pencil"></i> Add </a>
-                        </div>
+                        <a onclick="$('#brancRole_tr_<%= count%>').remove()" class="btn btn-outline   red btn-sm black">
+                            <i class="fa fa-trash-o"></i>
+                            <%- @translate "delete"%>
+                        </a>
                     </div>
-                    <div class="portlet-body">
-                            <table class="table table-striped table-bordered table-advance table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <i class="fa fa-building"></i>
-                                            <%= @translate "branch"%>
-                                        </th>
-                                        <th>
-                                            <i class="fa fa-anchor"></i>
-                                            <%= @translate "roles"%>
-                                        </th>
-                                        <th># </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% count=0%>
-                                     <% for brancRole in @model.branchRoles||[] : %>
-                                            <tr id="brancRole_tr_<%= count%>">
-                                                <td class="highlight">
-                                                    <%- @Select ("branchRoles["+count+"].[branch]"),[],{url:"/branches/all"} %>  
-                                                </td>
-                                                <td>
-                                                    <%- @MultiSelectForEnum ("branchRoles["+count+"].[roles]"),[],{url:"/roles/all"} %>  
-                                                </td>
-                                                <td>
-                                                    <div class="form-group form-md-line-input form-md-floating-label  has-info">
+                </td>
+            </tr>
+       <% end %>
 
-                                                    <a  onclick="$('#brancRole_tr_<%= count%>').remove()" class="btn btn-outline   red btn-sm black">
-                                                    <i class="fa fa-trash-o"></i> <%- @translate "delete"%> </a></div>
-                                                </td>
-                                            </tr>
-                                           <% count++%>
-                                     <% end %>
-                                </tbody>
-                            </table>
+                <div class="form-body">
+                    <div style="display:none">
+                        <%- @formGroup "_id"  %>
+                    </div>
+                    <div class="col-md-6">
+                        <%- @formGroup "name","required" %>
+                            <%- @formGroup "email" %>
+                    </div>
+                    <div class="col-md-6">
+                        <%- @formGroup "username" %>
+                            <%- @formGroup "password" %>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="portlet box blue">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="fa fa-briefcase"></i><%= @translate "branchRoles"%> </div>
+                                <div class="tools">
+                                    <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                                    <a href="" class="fullscreen" data-original-title="" title=""> </a>
+                                </div>
+                                <div class="actions">
+                                    <a onclick="addBranchRole()" class="btn btn-default btn-sm">
+                                        <i class="fa fa-plus"></i>
+                                        <%= @translate "new"%>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <table class="table table-striped table-bordered table-advance table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <i class="fa fa-building"></i>
+                                                <%= @translate "branch"%>
+                                            </th>
+                                            <th>
+                                                <i class="fa fa-anchor"></i>
+                                                <%= @translate "roles"%>
+                                            </th>
+                                            <th># </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="branchRole-tbody">
+                                          <% count=0%>
+                                          <% for brancRole in @model.branchRoles||[] : %>
+                                                <%- @Repeater(count)%>
+                                                <% count++%>
+                                           <% end %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+
+             <% block 'out-form' :%>
+                    <table> <tbody id="select-inner" style="display:none">
+                        <%- @Repeater(99999)%>
+                    </tbody></table>
+              <%end%>
+
+ <script>
+    var count=<%- count%>;
+    var select=$("#select-inner").html();
+    function addBranchRole(){
+       $("#branchRole-tbody").append(select.replace(/\99999/g, count));
+        count++;
+    }
+</script>

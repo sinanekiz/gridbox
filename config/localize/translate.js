@@ -232,6 +232,10 @@ module.exports={
   parent:{
     en:"Parent",
     tr:"Üst İşletme"
+  },
+  branchRoles:{
+    en:"Branch Roles",
+    tr:"İşletmelerdeki Rolleri"  
   }
 
 }

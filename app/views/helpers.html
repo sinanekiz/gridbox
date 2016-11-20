@@ -17,24 +17,24 @@
 <% end %>
 <% @Select = (title,enums,attr) -> %>
             <% if !attr: %><%attr={}%><%end%>
-            <%id=title.replace(".","_").replace(/\[(\w+)\]/g, '_$1');%> 
+            <%id=title.replace('.','_').replace(/\[(\w+)\]/g, '_$1');%> 
             <div class="form-group form-md-line-input form-md-floating-label has-info">
-                 <select class="form-control edited <%- id %> <%- attr.class %>" id="<%-id%>"  name="<%-title%>" value="<%- @objectParser(model,title) %>"  <%- attr.other %> >
+                 <select class="form-control edited <%= id %> <%= attr.class %>" id="<%=id%>"  name="<%=title%>" value="<%= @objectParser(model,title) %>"  <%= attr.other %> >
                    <% for enumx in enums : %>
                       <option <% if @objectParser(model,title)==enumx.value: %>selected<%end%> value="<%=enumx.value%>"><%= enumx.key%></option>
                    <% end %>
                 </select>
-              <%if attr.title :%><label for="<%- id %>"><%-  attr.title%></label><%end%>
+              <%if attr.title :%><label for="<%= id %>"><%= translate attr.title%></label><%end%>
            </div> 
             <% if attr.url: %> <script>
                  $(function(){
-                    simpler.selectList.createLists({domId:".<%-id%>",url:"<%-attr.url||''%>"})
+                    simpler.selectList.createLists({domId:".<%=id%>",url:"<%=attr.url||''%>"})
                  });
             </script><%end%>
 <% end %>
 <% @MultiSelectForEnum = (title,enums,attr) -> %>
             <% if !attr: %><%attr={}%><%end%>
-            <%id=title.replace(".","_").replace(/\[(\w+)\]/g, '_$1');%> 
+            <%id=title.replace('.','_').replace(/\[(\w+)\]/g, '_$1');%> 
             <div class="form-group" style="padding-top:20px">
                <select multiple class="multiselects <%- id %>" id="<%-id%>"  name="<%-title%>" value="<%= @objectParser(model,title) %>"  <%- attr.other %> >
                    <% for enumx in enums : %>
