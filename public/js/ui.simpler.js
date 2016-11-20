@@ -43,13 +43,38 @@ var simpler = {
     , error: function (error) {
         alert("İnternet Bağlantınızı Kontrol edin");
         console.log(error);
+    },
+    multiselectList: {
+        convertMultiselect: function (domId) {
+            $(domId || '.multiselects').multiselect({
+                includeSelectAllOption: true,
+                enableClickableOptGroups: true,
+                enableCollapsibleOptGroups: true,
+                disableIfEmpty: !0,
+                enableFiltering: true,
+                dropRight: true,
+                buttonWidth: "100%",
+                buttonClass: "btn blue-steel btn-outline"
+            });
+        },
+        createList: function (data) {
+            if (data.domId && data.url!="") {
+                simpler.ajax.get(data.url, function (response) {
+                    simpler.selectList.createSelectDom(response.value, data.selectedId, data.domId);
+                    simpler.multiselectList.convertMultiselect(data.domId)
+                }, function () { });
+            } else {
+                simpler.multiselectList.convertMultiselect(data.domId)
+            }
+
+        }
     }
     , selectList: {
         pushList: function (list, selectedId, inputId) {
             $(inputId).empty();
             $(inputId).append(list);
-            if(selectedId){$(inputId).val(selectedId);}
-            else{$(inputId).val($(inputId).attr("value"));}
+            if (selectedId) { $(inputId).val(selectedId); }
+            else { $(inputId).val($(inputId).attr("value").split(',')); }
         },
         createSelectDom: function (data, selectedId, inputId) {
             var list = "<option value=''>Seçiniz</option>";
