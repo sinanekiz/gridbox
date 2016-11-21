@@ -16,9 +16,7 @@ router.get('/index', base.index);
 router.get('/datatable', base.datatable);
 
 router.get('/edit/:_id?', function (req, res, next) {
-    res.locals.rights = enums.enumList(enums.rights);
     res.locals.groupedRights=enums.enumGrup({rights:enums.right});
-    console.log(res.locals.groupedRights);
     next();
 }, base.edit);
 router.post('/create', base.post);

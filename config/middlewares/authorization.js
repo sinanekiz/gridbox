@@ -1,5 +1,7 @@
 'use strict';
 
+var right=require("../../app/utils/enums").right;
+
 /*
  *  Generic require login routing middleware
  */
@@ -9,9 +11,7 @@ exports.requiresLogin = function (req, res, next) {
   if (req.method == 'GET') req.session.returnTo = req.originalUrl;
   res.redirect('/login');
 };
-
-
-
+ 
 
 /*
  *  User authorization routing middleware

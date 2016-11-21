@@ -1,22 +1,4 @@
-
-
-const rights = {
-    crud_user_read: 1,
-    crud_user_create: 2,
-    crud_user_update: 3,
-    crud_user_delete: 4,
-
-    crud_role_read: 5,
-    crud_role_create: 6,
-    crud_role_update: 7,
-    crud_role_delete: 8,
-
-    crud_branch_read: 9,
-    crud_branch_create: 10,
-    crud_branch_update: 11,
-    crud_branch_delete: 12,
-}
-
+ 
 const right = {
     crud: {
         user: {
@@ -45,6 +27,7 @@ const right = {
     },
     lockScreen: 15
 }
+module.exports.right = right;
 
 module.exports.enumList = function (enumDatas) {
     var enums = [];
@@ -56,8 +39,6 @@ module.exports.enumList = function (enumDatas) {
 module.exports.enumGrup=function(enumDatas){
         return enumGrups(enumDatas)
 }
-module.exports.rights = rights;
-module.exports.right = right;
 
 function enumGrups(enumDatas) {
 

@@ -189,7 +189,7 @@ UserSchema.methods.assign = function () {
 
 UserSchema.statics.load = function (options, cb) {
   options.select = options.select || 'name username email branchRoles';
-  return this.findOne(options.criteria)
+  return this.findOne(options.criteria).populate("branchRoles.roles")
     .select(options.select)
     .exec(cb);
 }
