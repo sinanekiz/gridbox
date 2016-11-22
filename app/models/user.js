@@ -189,15 +189,13 @@ UserSchema.methods.assign = function () {
 
 UserSchema.statics.load = function (options, cb) {
   options.select = options.select || 'name username email branchRoles';
-  return this.findOne(options.criteria).populate("branchRoles.roles")
+  return this.findOne(options.criteria)
     .select(options.select)
     .exec(cb);
 }
-UserSchema.statics.list = function (cb) {
-  var options = {}
-  options.select = options.select || 'name username';
-  options.criteria = { recordStatus: true }
-  return this.find(options.criteria)
+UserSchema.statics.loadAll = function (cb) {
+ options.select = options.select || 'name username email branchRoles';
+  return this.findOne(options.criteria).populate("branchRoles.roles")
     .select(options.select)
     .exec(cb);
 }
