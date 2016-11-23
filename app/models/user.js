@@ -193,7 +193,7 @@ UserSchema.statics.load = function (options, cb) {
     .select(options.select)
     .exec(cb);
 }
-UserSchema.statics.loadAll = function (cb) {
+UserSchema.statics.loadAll = function (options,cb) {
  options.select = options.select || 'name username email branchRoles';
   return this.findOne(options.criteria).populate("branchRoles.roles")
     .select(options.select)
