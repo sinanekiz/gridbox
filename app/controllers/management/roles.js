@@ -9,19 +9,27 @@ const base = require('../base').configure(Role, "roles");
 
 
 
+const rights = require('../../utils/enums').right;
+const auth = require("../../../config/middlewares/authorization").checkCrudRights;
+
+router.use(function (req, res, next) {
+    auth.setRights(rights.crud.role);
+    return auth.findAllRights(req, res, next);
+});
+
 
 router.param('_id', base.findOne);
 
-router.get('/index', base.index);
-router.get('/datatable', base.datatable);
+router.get('/index', auth.hasRead, base.index);
+router.get('/datatable', auth.hasRead, base.datatable);
 
-router.get('/edit/:_id?', function (req, res, next) {
-    res.locals.groupedRights=enums.enumGrup({rights:enums.right});
+router.get('/edit/:_id?', auth.hasRead, function (req, res, next) {
+    res.locals.groupedRights = enums.enumGrup({ rights: enums.right });
     next();
 }, base.edit);
-router.post('/create', base.post);
-router.post('/edit/:_id', base.put);
-router.delete('/delete/:_id', base.delete);
+router.post('/create', auth.hasCreate, base.post);
+router.post('/edit/:_id', auth.hasUpdate, base.put);
+router.delete('/delete/:_id', auth.hasDelete, base.delete);
 
 router.get('/all', base.all);
 

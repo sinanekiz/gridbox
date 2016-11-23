@@ -8,6 +8,7 @@ const { wrap: async } = require('co');
 const { respond, respondOrRedirect } = require('../utils');
 
 exports.configure = function (schema, controller) {
+
     return {
         findOne: async(function* (req, res, next, _id) {
             const criteria = { _id };

@@ -1,13 +1,31 @@
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Error <%= @error.status %></title>
-</head>
-<body>
-  <span>
-  Error Status: <%= @error.status %>
-  <hr>
-  <pre><%= @error.stack %></pre>
-  </span>
+<html lang="en">
+
+    <body class=" page-404-full-page">
+        <div class="row">
+            <div class="col-md-12 page-404">
+                <div class="number font-red"> Erişim Engellendi </div>
+                <div class="details">
+                    <h3>Oops! You're lost.</h3>
+                    <p> Bu işleme erişim yetkiniz yok,
+                        <br/> yöneticinize başvurun 
+                        <a href="/"> Anasayfaya dönün </a> veya farklı bir sonuç arayın </p>
+                    <form action="#">
+                        <div class="input-group input-medium">
+                            <input type="text" class="form-control" placeholder="keyword...">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn red">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <!-- /input-group -->
+                    </form>
+                </div>
+            </div>
+        </div>
+
+ 
 </body>
+
+
 </html>

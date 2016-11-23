@@ -9,15 +9,24 @@ const Branch = mongoose.model('Branch');
 
 const base = require('../base').configure(Branch, "branches");
 
+const rights = require('../../utils/enums').right;
+const auth = require("../../../config/middlewares/authorization").checkCrudRights;
+
+
+router.use(function (req, res, next) {
+    auth.setRights(rights.crud.branch);
+    return auth.findAllRights(req, res, next);
+});
+
 router.param('_id', base.findOne);
 
-router.get('/index', base.index);
-router.get('/datatable', base.datatable);
+router.get('/index',auth.hasRead, base.index);
+router.get('/datatable',auth.hasRead, base.datatable);
 
-router.get('/edit/:_id?', base.edit);
-router.post('/create', base.post);
-router.post('/edit/:_id', base.put);
-router.delete('/delete/:_id', async(function* (req, res, next) {
+router.get('/edit/:_id?',auth.hasRead, base.edit);
+router.post('/create',auth.hasCreate, base.post);
+router.post('/edit/:_id',auth.hasUpdate, base.put);
+router.delete('/delete/:_id',auth.hasDelete, async(function* (req, res, next) {
     var childs = yield Branch.list({criteria:{parent: req.params._id}});
     if (!childs.length){ return next();}
     res.json({
