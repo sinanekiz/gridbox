@@ -47,7 +47,7 @@ then
 $ npm start
 ```
 
-Then visit [http://localhost:3000/](http://localhost:3000/)
+Then visit only first time [http://localhost:3000/firstLogin](http://localhost:3000/firstLogin)
 
 ## Tests
 
