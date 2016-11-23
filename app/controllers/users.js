@@ -35,26 +35,7 @@ router.delete('/delete/:_id',auth.hasDelete, base.delete);
 
 
 
-router.post('/signup', async(function* (req, res) {
-  const user = new User(req.body);
-  user.provider = 'local';
-  try {
-    yield user.save();
-    req.logIn(user, err => {
-      if (err) req.flash('info', 'Sorry! We are not able to log you in!');
-      return res.redirect('/');
-    });
-  } catch (err) {
-    const errors = Object.keys(err.errors)
-      .map(field => err.errors[field].message);
 
-    res.render('users/signup', {
-      title: 'Sign up',
-      errors,
-      user
-    });
-  }
-}));
 
 router.get('/:userId', function (req, res) {
   const user = req.profile;

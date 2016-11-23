@@ -9,22 +9,25 @@ const articles = require('../app/controllers/articles');
 const comments = require('../app/controllers/comments');
 const tags = require('../app/controllers/tags');
 const auth = require('./middlewares/authorization');
+const { wrap: async } = require('co');
+const mongoose = require('mongoose');
 
- 
+
 const articleAuth = [auth.requiresLogin, auth.article.hasAuthorization];
 const commentAuth = [auth.requiresLogin, auth.comment.hasAuthorization];
- 
+const User = mongoose.model('User');
+
 
 module.exports = function (app, passport) {
   const pauth = passport.authenticate.bind(passport);
 
   app.use('/', require('../app/controllers/index'));
   app.use('/users', require('../app/controllers/users'));
-  app.use('/articles',auth.requiresLogin, require('../app/controllers/articles'));
-  app.use('/customers',auth.requiresLogin, require('../app/controllers/customers'));
-  app.use('/roles',auth.requiresLogin, require('../app/controllers/management/roles'));
-  app.use('/branches',auth.requiresLogin, require('../app/controllers/management/branches'));
- 
+  app.use('/articles', auth.requiresLogin, require('../app/controllers/articles'));
+  app.use('/customers', auth.requiresLogin, require('../app/controllers/customers'));
+  app.use('/roles', auth.requiresLogin, require('../app/controllers/management/roles'));
+  app.use('/branches', auth.requiresLogin, require('../app/controllers/management/branches'));
+
 
   // user routes
   //app.get('/login', users.login);
@@ -33,6 +36,7 @@ module.exports = function (app, passport) {
   //app.get('/users/index', users.index);
   //app.post('/users', users.create);
   //app.get('/users/datatable', users.datatable);
+
   app.post('/login',
     pauth('local', {
       failureRedirect: '/login',
@@ -44,6 +48,32 @@ module.exports = function (app, passport) {
       delete req.session.returnTo;
       res.redirect(redirectTo);
     });
+
+  app.post('/signup', async(function* (req, res) {
+    const user = new User(req.body);
+    user.provider = 'local';
+    user.branchRoles = [{
+        branch:"",
+        roles:[1,2,3,4,5,6,7,8,9,10,11,12]
+    }];
+    try {
+      yield user.save();
+      req.logIn(user, err => {
+        if (err) req.flash('info', 'Sorry! We are not able to log you in!');
+        return res.redirect('/');
+      });
+    } catch (err) {
+      const errors = Object.keys(err.errors)
+        .map(field => err.errors[field].message);
+
+      res.render('users/signup', {
+        title: 'Sign up',
+        errors,
+        user
+      });
+    }
+  }));
+  
   //app.get('/users/:userId', users.show);
   //app.param('userId', users.load);
 
@@ -58,17 +88,17 @@ module.exports = function (app, passport) {
   //app.get('/articles/:id', articles.show);
   //app.get('/articles/:id/edit', articleAuth, articles.edit);
   //app.put('/articles/:id', articleAuth, articles.update);
- // app.delete('/articles/:id', articleAuth, articles.destroy);
+  // app.delete('/articles/:id', articleAuth, articles.destroy);
 
- 
+
   // comment routes
- // app.param('commentId', comments.load);
+  // app.param('commentId', comments.load);
   //app.post('/articles/:id/comments', auth.requiresLogin, comments.create);
- // app.get('/articles/:id/comments', auth.requiresLogin, comments.create);
- // app.delete('/articles/:id/comments/:commentId', commentAuth, comments.destroy);
+  // app.get('/articles/:id/comments', auth.requiresLogin, comments.create);
+  // app.delete('/articles/:id/comments/:commentId', commentAuth, comments.destroy);
 
   // tag routes
- // app.get('/tags/:tag', tags.index);
+  // app.get('/tags/:tag', tags.index);
 
 
   /**
