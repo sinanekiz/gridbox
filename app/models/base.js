@@ -51,12 +51,6 @@ baseSchema.methods.assign = function () {
     return "";
 }
 
-baseSchema.methods.saveChanges = function () {
-    const err = this.validateSync();
-    if (err && err.toString()) throw new Error(err.toString());
-    return this.save();
-}
-
 
 baseSchema.statics.columns = function () {
     var columns = []
@@ -111,10 +105,6 @@ baseSchema.statics.createDatatable = function (action = "datatable") {
     return datatable;
 }
 
-baseSchema.statics.load = function (options, cb) {
-    return this.findOne(options.criteria).exec(cb);
-}
-
 baseSchema.statics.new = function (newObj) {
     if (newObj) {
         return new this(newObj);
@@ -122,12 +112,30 @@ baseSchema.statics.new = function (newObj) {
     return new this();
 }
 
+baseSchema.statics.repo=function(req){
+    req.user.branchRoles.branch
+    return this.findOne(options.criteria)
+}
+
+
+baseSchema.statics.load = function (options, cb) {
+    return this.findOne(options.criteria).exec(cb);
+}
+
+
+
 baseSchema.statics.list = function (options) {
     const criteria = options.criteria || {};
     criteria.recordStatus = true;
     return this.find(criteria)
         .sort({ createdAt: -1 })
         .exec();
+}
+
+baseSchema.methods.saveChanges = function () {
+    const err = this.validateSync();
+    if (err && err.toString()) throw new Error(err.toString());
+    return this.save();
 }
 
 module.exports = baseSchema;

@@ -21,6 +21,11 @@ router.post('/create',   base.post);
 router.post('/edit/:_id',   base.put);
 router.delete('/delete/:_id',   base.delete);
 
+router.delete('/getWithbranch',async(function* (req, res) {0
+    
+
+}));
+
 router.get('/createAll', async(function* (req, res) {
 
 

@@ -19,6 +19,11 @@ const Branch = base.extend({
     province:{type:String}
 });
 
+Branch.pre('save', function (next) {
+  this.branch=this._id
+  next();
+});
+
 Branch.methods.assign = function () {
     return "name childs parent province";
 }
