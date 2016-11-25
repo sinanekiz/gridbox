@@ -1,9 +1,5 @@
 'use strict';
 
-/**
- * Module dependencies.
- */
-
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 const extend = require('mongoose-schema-extend');
@@ -17,10 +13,6 @@ const oAuthTypes = [
   'google',
   'linkedin'
 ];
-
-/**
- * User Schema
- */
 
 const UserSchema = base.extend({
   name: { type: String, default: '' },

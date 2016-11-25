@@ -34,8 +34,8 @@ var checkCrudRights = {
       delete: false
     }
   },
-  findAllRights: function (req, res, next) {
-    
+  findAllRights: function (req, rights, next) {
+    checkCrudRights.setRights(rights);
     req.user.branchRoles.filter(function (branchRole) {
       branchRole.roles.filter(function (role) {
         console.log(role);

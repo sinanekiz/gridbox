@@ -9,18 +9,19 @@ const articles = require('../app/controllers/articles');
 const comments = require('../app/controllers/comments');
 const tags = require('../app/controllers/tags');
 const auth = require('./middlewares/authorization');
-const { wrap: async } = require('co');
-const mongoose = require('mongoose');
+const rights = require('../app/utils/enums').right;
 
 
 const articleAuth = [auth.requiresLogin, auth.article.hasAuthorization];
 const commentAuth = [auth.requiresLogin, auth.comment.hasAuthorization];
-const User = mongoose.model('User');
 
 
 module.exports = function (app, passport) {
   const pauth = passport.authenticate.bind(passport);
 
+  app.use(function (req, res, next) {
+       req.rights=rights;  next();
+  });
   app.use('/', require('../app/controllers/index'));
   app.use('/users', require('../app/controllers/users'));
   app.use('/articles', auth.requiresLogin, require('../app/controllers/articles'));
@@ -49,31 +50,8 @@ module.exports = function (app, passport) {
       res.redirect(redirectTo);
     });
 
-  app.post('/signup', async(function* (req, res) {
-    const user = new User(req.body);
-    user.provider = 'local';
-    user.branchRoles = [{
-        branch:"",
-        roles:[1,2,3,4,5,6,7,8,9,10,11,12]
-    }];
-    try {
-      yield user.save();
-      req.logIn(user, err => {
-        if (err) req.flash('info', 'Sorry! We are not able to log you in!');
-        return res.redirect('/');
-      });
-    } catch (err) {
-      const errors = Object.keys(err.errors)
-        .map(field => err.errors[field].message);
 
-      res.render('users/signup', {
-        title: 'Sign up',
-        errors,
-        user
-      });
-    }
-  }));
-  
+
   //app.get('/users/:userId', users.show);
   //app.param('userId', users.load);
 

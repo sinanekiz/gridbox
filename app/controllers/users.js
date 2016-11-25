@@ -14,13 +14,10 @@ const User = mongoose.model('User');
 
 const base = require('./base').configure(User, "users");
 
-const rights = require('../utils/enums').right;
 const auth = require("../../config/middlewares/authorization").checkCrudRights;
 
-
 router.use(function (req, res, next) {
-    auth.setRights(rights.crud.user);
-    return auth.findAllRights(req, res, next);
+    return auth.findAllRights(req, req.rights.crud.user, next);
 });
 
 router.param('_id', base.findOne);

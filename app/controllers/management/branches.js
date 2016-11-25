@@ -9,13 +9,10 @@ const Branch = mongoose.model('Branch');
 
 const base = require('../base').configure(Branch, "branches");
 
-const rights = require('../../utils/enums').right;
 const auth = require("../../../config/middlewares/authorization").checkCrudRights;
 
-
 router.use(function (req, res, next) {
-    auth.setRights(rights.crud.branch);
-    return auth.findAllRights(req, res, next);
+    return auth.findAllRights(req, req.rights.crud.branch, next);
 });
 
 router.param('_id', base.findOne);

@@ -27,7 +27,7 @@ const baseSchema = new Schema({
     branch: {
         type: String,
         ref: 'Branch',
-        hideTable: true,
+        //hideTable: true,
         default:null
     },
     createdAt: {
@@ -58,7 +58,7 @@ baseSchema.statics.columns = function () {
     this.schema.eachPath(function (path) {
         var attr = schm.paths[path];
         if (attr.options && !attr.options.hideTable) {
-            columns.push({ data: path, title: localize.translate(path) });
+            columns.push({ data: path, title: localize.translate(path), name: localize.translate(path) });
         }
     });
     return columns;

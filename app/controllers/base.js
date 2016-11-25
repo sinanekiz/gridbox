@@ -36,6 +36,7 @@ exports.configure = function (schema, controller) {
             });
         }),
         datatable: async(function* (req, res, next) {
+            console.log(req.query.columns);
             schema.dataTable(req.query, function (err, data) { return res.send(data); });
         }),
         all: async(function* (req, res) {
