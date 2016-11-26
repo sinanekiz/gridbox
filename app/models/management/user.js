@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 const extend = require('mongoose-schema-extend');
-var base = require('./base');
+var base = require('../base');
 
 const Schema = mongoose.Schema;
 const oAuthTypes = [

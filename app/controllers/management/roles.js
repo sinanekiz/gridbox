@@ -10,7 +10,7 @@ const base = require('../base').configure(Role, "roles");
 const auth = require("../../../config/middlewares/authorization").checkCrudRights;
 
 router.use(function (req, res, next) {
-    return auth.findAllRights(req, req.rights.crud.role, next);
+   auth.findAllRights(req, req.rights.crud.role); next();
 });
 
 

@@ -27,8 +27,8 @@ const baseSchema = new Schema({
     branch: {
         type: String,
         ref: 'Branch',
-        //hideTable: true,
-        default:null
+        hideTable: true,
+        default: null
     },
     createdAt: {
         type: Date,
@@ -58,7 +58,7 @@ baseSchema.statics.columns = function () {
     this.schema.eachPath(function (path) {
         var attr = schm.paths[path];
         if (attr.options && !attr.options.hideTable) {
-            columns.push({ data: path, title: localize.translate(path), name: localize.translate(path) });
+            columns.push({ data: path, title: localize.translate(path), name: path });
         }
     });
     return columns;
@@ -70,6 +70,7 @@ baseSchema.statics.createDatatable = function (action = "datatable") {
         processing: true,
         serverSide: true,
         colReorder: true,
+        bChunkSearch :true,
         name: "datatable-1",
         dom: '<"top"i<"pull-right"f>>rt<"bottom"l<"pull-right"p>><"clear">',
         ajax: {
@@ -112,8 +113,8 @@ baseSchema.statics.new = function (newObj) {
     return new this();
 }
 
-baseSchema.statics.repo=function(req){
-    req.user.branchRoles.branch
+baseSchema.statics.repo = function (user) {
+    user.branchRoles.branch
     return this.findOne(options.criteria)
 }
 
@@ -127,6 +128,7 @@ baseSchema.statics.load = function (options, cb) {
 baseSchema.statics.list = function (options) {
     const criteria = options.criteria || {};
     criteria.recordStatus = true;
+    console.log(criteria);
     return this.find(criteria)
         .sort({ createdAt: -1 })
         .exec();

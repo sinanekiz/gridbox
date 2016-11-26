@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 const extend = require('mongoose-schema-extend');
-var base = require('./base');
+var base = require('../base');
 
 const Branch = base.extend({
     name: { type: String, default: '' },
@@ -19,6 +19,7 @@ const Branch = base.extend({
     province:{type:String}
 });
 
+
 Branch.pre('save', function (next) {
   this.branch=this._id
   next();
@@ -28,5 +29,6 @@ Branch.methods.assign = function () {
     return "name childs parent province";
 }
 
+ 
  
 mongoose.model('Branch', Branch);

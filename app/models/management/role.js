@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 const extend = require('mongoose-schema-extend');
-var base = require('./base');
+var base = require('../base');
 
 const Role = base.extend({
   name: { type: String, default: '' },

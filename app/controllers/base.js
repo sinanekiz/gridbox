@@ -6,6 +6,7 @@
 const only = require('only');
 const { wrap: async } = require('co');
 const { respond, respondOrRedirect } = require('../utils');
+const { allBranches } = require('../utils/helper');
 
 exports.configure = function (schema, controller) {
 
@@ -36,11 +37,12 @@ exports.configure = function (schema, controller) {
             });
         }),
         datatable: async(function* (req, res, next) {
-            console.log(req.query.columns);
-            schema.dataTable(req.query, function (err, data) { return res.send(data); });
+            var branches=yield allBranches(req.user,req.rights.crud.branch.read); 
+            schema.dataTable(req.query,{conditions:{$or:[{branch:{$in:branches}},{branch:null}]}}, function (err, data) { return res.send(data); });
         }),
         all: async(function* (req, res) {
-            var all = yield schema.list({});
+            var branches=yield allBranches(req.user,req.rights.crud.branch.read); 
+            var all = yield schema.list({criteria:{$or:[{branch:{$in:branches}},{branch:null}]}});
             res.send({ value: all });
         }),
         edit: async(function* (req, res) {
@@ -56,7 +58,7 @@ exports.configure = function (schema, controller) {
         post: async(function* (req, res) {
             const model = schema.new(req.body);
             //model.user = req.user;
-            console.log(model)
+            //console.log(model)
 
             try {
                 yield model.saveChanges();
@@ -78,7 +80,7 @@ exports.configure = function (schema, controller) {
         }),
         put: async(function* (req, res) {
             const model = req.model;
-            console.log(req.body)
+            //console.log(req.body)
             Object.assign(model, only(req.body, model.assign()));
             try {
                 yield model.saveChanges();

@@ -3,7 +3,8 @@
 require('dotenv').config();
 
 const fs = require('fs');
-const join = require('path').join;
+const path = require('path');
+const join =path.join;
 const express = require('express');
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -19,15 +20,38 @@ const app = express();
 
 module.exports = app;
 
-// Bootstrap models
-fs.readdirSync(models)
-  .filter(file => ~file.search(/^[^\.].*\.js$/))
-  .forEach(file => require(join(models, file)));
+var walk = function(dir, done) {
+  var results = [];
+  fs.readdir(dir, function(err, list) {
+    if (err) return done(err);
+    var pending = list.length;
+    if (!pending) return done(null, results);
+    list.forEach(function(file) {
+      file = path.resolve(dir, file);
+      fs.stat(file, function(err, stat) {
+        if (stat && stat.isDirectory()) {
+          walk(file, function(err, res) {
+            results = results.concat(res);
+            if (!--pending) done(null, results);
+          });
+        } else {
+          results.push(file);
+          if (!--pending) done(null, results);
+        }
+      });
+    });
+  });
+};
+
 
 // Bootstrap routes
-require('./config/passport')(passport);
-require('./config/express')(app, passport);
-require('./config/routes')(app, passport);
+walk(models, function(err, results) {
+  if (err) throw err;
+   results.forEach(file => require(file)); 
+   require('./config/passport')(passport);
+   require('./config/express')(app, passport);
+   require('./config/routes')(app, passport);
+});
 
 connect()
   .on('error', console.log)
