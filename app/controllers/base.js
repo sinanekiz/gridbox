@@ -6,15 +6,15 @@
 const only = require('only');
 const { wrap: async } = require('co');
 const { respond, respondOrRedirect } = require('../utils');
-const { allBranches } = require('../utils/helper');
+const { getBranchConditions } = require('../utils/helper');
 
 exports.configure = function (schema, controller) {
 
     return {
         findOne: async(function* (req, res, next, _id) {
-            const criteria = { _id };
+            const conditions = { _id };
             try {
-                req.model = yield schema.load({ criteria });
+                req.model = yield schema.load({ conditions });
                 if (!req.model) return next(new Error('Record not found'));
             } catch (err) {
                 return next(err);
@@ -37,12 +37,12 @@ exports.configure = function (schema, controller) {
             });
         }),
         datatable: async(function* (req, res, next) {
-            var branches=yield allBranches(req.user,req.rights.crud.branch.read); 
-            schema.dataTable(req.query,{conditions:{$or:[{branch:{$in:branches}},{branch:null}]}}, function (err, data) { return res.send(data); });
+            var options=yield getBranchConditions(req.user,req.currentRight); 
+            schema.dataTable(req.query,options, function (err, data) { return res.send(data); });
         }),
         all: async(function* (req, res) {
-            var branches=yield allBranches(req.user,req.rights.crud.branch.read); 
-            var all = yield schema.list({criteria:{$or:[{branch:{$in:branches}},{branch:null}]}});
+            var options=yield getBranchConditions(req.user,req.currentRight); 
+            var all = yield schema.list(options);
             res.send({ value: all });
         }),
         edit: async(function* (req, res) {

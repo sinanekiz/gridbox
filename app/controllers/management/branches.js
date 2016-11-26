@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 const enums = require('../../utils/enums');
+const { getBranchConditions } = require('../../utils/helper');
 const { respond, respondOrRedirect } = require('../../utils');
 const { wrap: async } = require('co');
 
@@ -12,36 +13,32 @@ const base = require('../base').configure(Branch, "branches");
 const auth = require("../../../config/middlewares/authorization").checkCrudRights;
 
 router.use(function (req, res, next) {
-     auth.findAllRights(req, req.rights.crud.branch );next();
+    auth.findAllRights(req, req.rights.crud.branch); next();
 });
 
 router.param('_id', base.findOne);
 
-router.get('/index',auth.hasRead, base.index);
-router.get('/datatable',auth.hasRead, base.datatable);
+router.get('/index', auth.hasRead, base.index);
+router.get('/datatable', auth.hasRead, base.datatable);
 
-router.get('/edit/:_id?',auth.hasRead, base.edit);
-router.post('/create',auth.hasCreate, base.post);
-router.post('/edit/:_id',auth.hasUpdate, base.put);
-router.delete('/delete/:_id',auth.hasDelete, async(function* (req, res, next) {
-    var childs = yield Branch.list({criteria:{parent: req.params._id}});
-    if (!childs.length){ return next();}
+router.get('/edit/:_id?', auth.hasRead, base.edit);
+router.post('/create', auth.hasCreate, base.post);
+router.post('/edit/:_id', auth.hasUpdate, base.put);
+router.delete('/delete/:_id', auth.hasDelete, async(function* (req, res, next) {
+    var childs = yield Branch.list({ conditions: { parent: req.params._id } });
+    if (!childs.length) { return next(); }
     res.json({
         type: 'error',
         text: 'Please move this branch sub branches before delete'
     });
 }), base.delete);
+router.get('/all', auth.hasRead, base.all);
 
 //page level 
 
-router.get('/tree', async(function* (req, res) {
-    var tree = yield Branch.list({});
-    tree = tree.filter(function (t) {
-        t.id = t._id;
-        t.text = t.name;
-    })
+router.get('/tree', auth.hasRead, async(function* (req, res) {
+
     res.render('branches/tree', {
-        tree: tree,
         crud: {
             create: "/" + "branches" + "/edit/",
             update: "/" + "branches" + "/edit/",
@@ -51,13 +48,14 @@ router.get('/tree', async(function* (req, res) {
     });
 }));
 
-router.get('/all', base.all);
 
-router.get('/treeList', async(function* (req, res) {
-
-    var tree = yield Branch.list({});
+router.get('/treeList', auth.hasRead, async(function* (req, res) {
+    var options = yield getBranchConditions(req.user, req.currentRight);
+    var tree = yield Branch.list(options);
     var data = []
     tree.filter(function (t) {
+        isExist = tree.filter(x => x._id == t.parent);
+        t.parent = isExist.length == 0 ? "#" : t.parent;
         data.push({
             id: t._id,
             text: t.name,

@@ -18,7 +18,7 @@ module.exports = new LocalStrategy({
   },
   function (email, password, done) {
     const options = {
-      criteria: { email: email },
+      conditions: { email: email },
       select: 'name username email hashed_password salt'
     };
     User.load(options, function (err, user) {

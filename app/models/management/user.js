@@ -179,13 +179,13 @@ UserSchema.methods.assign = function () {
 
 UserSchema.statics.load = function (options, cb) {
   options.select = options.select || 'name username email branchRoles';
-  return this.findOne(options.criteria)
+  return this.findOne(options.conditions)
     .select(options.select)
     .exec(cb);
 }
 UserSchema.statics.loadAll = function (options,cb) {
  options.select = options.select || 'name username email branchRoles';
-  return this.findOne(options.criteria).populate("branchRoles.roles")
+  return this.findOne(options.conditions).populate("branchRoles.roles")
     .select(options.select)
     .exec(cb);
 }

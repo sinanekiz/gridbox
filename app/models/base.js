@@ -112,24 +112,18 @@ baseSchema.statics.new = function (newObj) {
     }
     return new this();
 }
-
-baseSchema.statics.repo = function (user) {
-    user.branchRoles.branch
-    return this.findOne(options.criteria)
-}
-
-
+ 
 baseSchema.statics.load = function (options, cb) {
-    return this.findOne(options.criteria).exec(cb);
+    return this.findOne(options.conditions).exec(cb);
 }
 
 
 
 baseSchema.statics.list = function (options) {
-    const criteria = options.criteria || {};
-    criteria.recordStatus = true;
-    console.log(criteria);
-    return this.find(criteria)
+    const conditions = options.conditions || {};
+    conditions.recordStatus = true;
+    console.log(conditions);
+    return this.find(conditions)
         .sort({ createdAt: -1 })
         .exec();
 }

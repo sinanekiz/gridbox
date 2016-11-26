@@ -20,7 +20,7 @@ exports.index = async(function* (req, res) {
   const options = {
     limit: limit,
     page: page,
-    criteria: criteria
+    conditions: criteria
   };
 
   const articles = yield Article.list(options);

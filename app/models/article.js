@@ -156,7 +156,7 @@ ArticleSchema.methods.removeComment= function (commentId) {
    */
 
   ArticleSchema.statics.list = function (options) {
-    const criteria = options.criteria || {};
+    const criteria = options.conditions || {};
     const page = options.page || 0;
     const limit = options.limit || 30;
     return this.find(criteria)

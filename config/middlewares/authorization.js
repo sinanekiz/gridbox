@@ -20,8 +20,10 @@ exports.requiresLogin = function (req, res, next) {
 
 var checkCrudRights = {
   hasRights: {}, 
+  rights: {}, 
   findAllRights: function (req, rights) {
     checkCrudRights.hasRights = {}
+    checkCrudRights.rights = rights
     req.user.branchRoles.filter(function (branchRole) {
       branchRole.roles.filter(function (role) {
         if (role.rights.indexOf(rights.read) > -1) {
@@ -43,7 +45,7 @@ var checkCrudRights = {
     })
   },
   hasRead: function (req, res, next) {
-    console.log(checkCrudRights.hasRights.read)
+    req.currentRight=checkCrudRights.rights.read;
     if (!checkCrudRights.hasRights.read) {
       req.flash('info', 'You are not authorized');
       return res.render('error');
@@ -51,6 +53,7 @@ var checkCrudRights = {
     next();
   },
   hasCreate: function (req, res, next) {
+    req.currentRight=checkCrudRights.rights.create;
     if (!checkCrudRights.hasRights.create) {
       req.flash('info', 'You are not authorized');
       return res.render('error');
@@ -58,6 +61,7 @@ var checkCrudRights = {
     next();
   },
   hasUpdate: function (req, res, next) {
+    req.currentRight=checkCrudRights.rights.update;
     if (!checkCrudRights.hasRights.update) {
       req.flash('info', 'You are not authorized');
       return res.render('error');
@@ -65,6 +69,7 @@ var checkCrudRights = {
     next();
   },
   hasDelete: function (req, res, next) {
+    req.currentRight=checkCrudRights.rights.delete;
     if (!checkCrudRights.hasRights.delete) {
       req.flash('info', 'You are not authorized');
       return res.render('error');

@@ -45,5 +45,11 @@ var allBranches = async(function* (user, right) {
     return parents;
 })
 
+var getBranchConditions=async(function* (user, right) {
+    var all = yield allBranches(user, right);
+    return {conditions:{$or:[{branch:{$in:all}},{branch:null}]}};
+})
 
+
+module.exports.getBranchConditions = getBranchConditions;
 module.exports.allBranches = allBranches;
