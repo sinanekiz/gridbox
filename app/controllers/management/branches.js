@@ -22,7 +22,11 @@ router.get('/index', auth.hasRead, base.index);
 router.get('/datatable', auth.hasRead, base.datatable);
 
 router.get('/edit/:_id?', auth.hasRead, base.edit);
-router.post('/create', auth.hasCreate, base.post);
+router.post('/create', auth.hasCreate,function(req,res,next){
+    req.body.parent=req.user.branchRoles[0].branch;
+    console.log(req.body.parent)
+    next();
+}, base.post);
 router.post('/edit/:_id', auth.hasUpdate, base.put);
 router.delete('/delete/:_id', auth.hasDelete, async(function* (req, res, next) {
     var childs = yield Branch.list({ conditions: { parent: req.params._id } });
