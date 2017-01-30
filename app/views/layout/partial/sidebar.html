@@ -25,13 +25,12 @@
 <% block 'scripts-sidebar' : %>
 <script>
     var sidebar = [
-       { Title: '<%= @translate "home"%>', Icon: "icon-home", Right: 1, ClassAttribute: "nav-item start", HrefAttribute: "/" }
-     , { Title: '<%= @translate "articles"%>', Icon: "icon-article", Right: 1, ClassAttribute: "nav-item", HrefAttribute: "/articles/index" }
+       { Title: '<%= @translate "home"%>', Icon: "icon-home", Right: 1, ClassAttribute: "nav-item start", HrefAttribute: "/" } 
      , {
          Title:'<%= @translate "example"%>', Icon: "icon-diamond", Right: 1, ClassAttribute: "nav-item", HrefAttribute: "#", SubMenuList: [
-             { Title: "Marka Model Islemleri", HrefAttribute: "/modemBrand", Right: 1, ClassAttribute: "nav-item" },
-             { Title: "Modem Yazilimlari", HrefAttribute: "/modemFirmware", Right: 1, ClassAttribute: "nav-item" },
-             { Title: "Modem Hatalari", HrefAttribute: "/modemException", Right: 1, ClassAttribute: "nav-item" }
+             { Title: "Marka Model Islemleri", HrefAttribute: "#", Right: 1, ClassAttribute: "nav-item" },
+             { Title: "Modem Yazilimlari", HrefAttribute: "#", Right: 1, ClassAttribute: "nav-item" },
+             { Title: "Modem Hatalari", HrefAttribute: "#", Right: 1, ClassAttribute: "nav-item" }
          ]
      }
      , { Title: '<%= @translate "management"%>', Icon: "icon-article", Right: 1, ClassAttribute: "heading",   }
